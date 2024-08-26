@@ -17,3 +17,5 @@
 - Vitest : Librairie pour les tests unitaires
 
 - Storybook : Utile pour les échangent avec les UI / UX
+
+- Istanbul : Pour generer des rapports de coverage
