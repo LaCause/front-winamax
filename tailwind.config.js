@@ -5,13 +5,22 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        archivoNarrow: ['ArchivoNarrow'],
+        archivoNarrowBold: ['ArchivoNarrowBold'],
+        archivoNarrowSemiBold: ['ArchivoNarrowSemiBold'],
+        archivoMedium: ['ArchivoMedium'],
+      },
+      boxShadow: {
+        shadowTab: '0px 0px 0px 4px #33cc7f'
+      },
       colors: {
         primary: {
-          dark: '#ODODOD',
+          grey: '#f0f1f5',
           red: '#AA0909',
           yellow: '#FFBF00',
-          white: '#FOF1F5',
-          green: '#33CCTF',
+          white: '#F0F1F5',
+          green: '#33cc7f',
           darkgreen: '#145233',
         }
       }
