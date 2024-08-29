@@ -14,3 +14,23 @@
 
   height: 200px;
 }
+
+@font-face {
+  font-family: 'ArchivoNarrow';
+  src: url('/public/assets/fonts/ArchivoNarrow-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'ArchivoNarrowBold';
+  src: url('/public/assets/fonts/ArchivoNarrow-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'ArchivoNarrowSemiBold';
+  src: url('/public/assets/fonts/ArchivoNarrow-SemiBold.ttf');
+}
+
+@font-face {
+  font-family: 'ArchivoNarrowMedium';
+  src: url('/public/assets/fonts/ArchivoNarrow-Medium.ttf');
+}
