@@ -1,3 +1,5 @@
+import daisyui from 'daisyui';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -5,6 +7,12 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        moveFirstToken: "moveFirstToken 0.1s linear forwards",
+        moveSecondToken: "moveSecondToken 0.1s linear forwards",
+        moveThirdToken: "moveThirdToken 0.1s linear forwards",
+        moveThirdTokenReverse: 'moveThirdTokenReverse 0.1s linear forwards'
+      },
       fontFamily: {
         archivoNarrow: ['ArchivoNarrow'],
         archivoNarrowBold: ['ArchivoNarrowBold'],
@@ -26,7 +34,6 @@ export default {
       }
     },
   },
-
-  plugins: [],
+  plugins: [daisyui],
 }
 
