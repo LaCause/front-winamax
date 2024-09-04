@@ -29,6 +29,7 @@ export const Tab: React.FC<TabProps> = ({ hasInfoBox, tournament, addTournament,
     const border = active ? 'shadow-shadowTab' : null
 
     useEffect(() => {
+        console.log(tournament)
         if (active) {
             addTournament(tournament)
         } else {

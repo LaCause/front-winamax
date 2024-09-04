@@ -11,3 +11,8 @@ export interface Tournament {
   }
 
 export const MAX_TOURNAMENT_LIST = 350
+
+export enum TOURNAMENT_PRICES {
+  MIN = 4,
+  MAX = 10000
+}

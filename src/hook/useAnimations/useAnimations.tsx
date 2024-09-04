@@ -30,7 +30,7 @@ export const useAnimations = (active?: boolean) => {
             clearTimeout(secondAnimationTimeout);
             clearTimeout(thirdAnimationTimeout);
         };
-    }, [active]); // Dépend uniquement de `active`
+    }, [active]);
 
     return {
         firstAnimation,
