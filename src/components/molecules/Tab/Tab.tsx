@@ -5,8 +5,10 @@ import iconF from '/assets/icons/f.png'
 import React, { useEffect, useState } from 'react'
 import iconToken from '/assets/icons/token.svg'
 import { TabProps } from './Tab.model'
+import { formatCurrency, formatDate } from '../../../utils'
+import { useAnimations } from '../../../hook/useAnimations/useAnimations'
 
-const addTick = (isActive: TabProps['isActive']) => isActive ? <>
+const addTick = (isActive: boolean) => isActive ? <>
     <span className='flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto'>
         <img className='mr-1' src={iconTick} width={15}/>
         <b className='mr-2 font-archivoNarrowBold text-xl'>IN</b>
@@ -19,48 +21,31 @@ const addInfoBox = (hasInfoBox: TabProps['hasInfoBox']) => hasInfoBox ? <>
     </section>
 </> : null
 
-export const Tab: React.FC<TabProps> = ({ isActive, hasInfoBox, onClick }) => {
-    const border = isActive ? 'shadow-shadowTab' : null
-    const [firstAnimation, setFirstAnimation] = useState<string | null>()
-    const [secondAnimation, setSecondAnimation] = useState<string | null>()
-    const [thirdAnimation, setThirdAnimation] = useState<string | null>()
+export const Tab: React.FC<TabProps> = ({ hasInfoBox, tournament, addTournament, removeTournament }) => {
+    const [active, setActive] = useState<boolean>()
+    const { firstAnimation, secondAnimation, thirdAnimation} = useAnimations(active)
+    
+    const handleClick = (event: React.MouseEvent<HTMLLIElement>) => setActive(!active);
+    const border = active ? 'shadow-shadowTab' : null
 
     useEffect(() => {
-        const firstInterval = setTimeout(() => {
-            if (isActive !== undefined) {
-                setFirstAnimation(isActive ? 'animate-running animate-moveFirstToken' : 'animate-running animate-moveFirstTokenReverse')
-            }
-        }, 100)
-
-        const secondInterval = setTimeout(() => {
-            if (isActive !== undefined) {
-                setSecondAnimation(isActive ? 'animate-running animate-moveSecondToken' : 'animate-running animate-moveSecondTokenReverse')
-            }
-        }, 200)
-
-        const thirdInterval = setTimeout(() => {
-            if (isActive !== undefined) {
-                setThirdAnimation(isActive ? 'animate-running animate-moveThirdToken' : 'animate-running animate-moveThirdTokenReverse')
-            }
-        }, 300)
-
-        return () => {
-            clearTimeout(firstInterval)
-            clearTimeout(secondInterval)
-            clearTimeout(thirdInterval)
+        if (active) {
+            addTournament(tournament)
+        } else {
+            removeTournament(tournament)
         }
-    }, [isActive])
+    }, [active])
 
     return <>
-        <li className='relative' onClick={onClick} >
+        <li key={tournament.tournamentId+1} className='relative' onClick={(event) => handleClick(event)} >
             {addInfoBox(hasInfoBox)}
             <section className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 ${border} cursor-pointer`}>
                 <div className='flex items-center'>
                     <span className='flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md'>
                         <img className='object-contain' src={flagFR} width={15}/>
                     </span>
-                    <b className='font-archivoNarrowBold text-xl'>Monster Stack</b>
-                    {addTick(isActive)}
+                    <b className='font-archivoNarrowBold text-xl'>{tournament.name}</b>
+                    {active && addTick(active)}
                 </div>
                 <img src={iconToken} width={25} className={`animated-token opacity-0 ${firstAnimation}`}/>
                 <img src={iconToken} width={25} className={`animated-token opacity-0 ${secondAnimation}`}/>
@@ -68,7 +53,7 @@ export const Tab: React.FC<TabProps> = ({ isActive, hasInfoBox, onClick }) => {
                 <div className='flex'>
                     <div className='w-1/2 flex'>
                     <span className='w-1/2'>
-                        <time className='font-archivoNarrowSemiBold'>Dem. 10:48</time>
+                        <time className='font-archivoNarrowSemiBold'>{formatDate(tournament.startDate)}</time>
                     </span>
                     <span className='flex w-1/2'>
                         <img className='object-contain rounded-lg' src={iconM} width={20}/>
@@ -77,16 +62,16 @@ export const Tab: React.FC<TabProps> = ({ isActive, hasInfoBox, onClick }) => {
                     </div>
                     <div className='w-1/2 flex justify-between front)'>
                         <p className='font-archivoNarrow'>
-                            NLHE
+                            {tournament.limit}
                         </p>
                         <p className='font-archivoNarrow'>
-                            125
+                            {tournament.nbPlayers}
                         </p>
                         <p className='font-archivoNarrow'>
-                            30 €
+                            {formatCurrency(tournament.buyIn) }
                         </p>
                         <span className='font-archivoNarrowBold rounded-3xl bg-primary-grey px-2 text-primary-red'>
-                            15 000 €
+                            {formatCurrency(tournament.prizepool)}
                         </span>
                     </div>
                 </div>
