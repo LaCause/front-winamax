@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
 import { MAX_TOURNAMENT_LIST, Tournament } from "./useTournaments.model"
+import { filterRules } from "./filterRules"
 
 export const useTournaments = () => {
     const [tournamentList, setTournamentList] = useState<Tournament[]>()
     const [allTournamentList, setAllTournamentList] = useState<Tournament[]>()
     const [selectedTournaments, setSelectedTournaments] = useState<Tournament[]>([])
     const [loading, setLoading] = useState<boolean>(true)
+    const [error, setError] = useState<any>()
 
     const addTournament = (tournament: Tournament): void | Tournament[] => {
         setSelectedTournaments([...selectedTournaments, tournament])    
@@ -21,9 +23,9 @@ export const useTournaments = () => {
     }
 
     const filterTournament = (min: number, max: number) => {
-        const filtered = allTournamentList?.filter((tournament) => tournament.buyIn >= min && tournament.buyIn <= max)
+        if (min > max) return setError('Erreur sur les filtres')
+        const filtered = allTournamentList?.filter((tournament) => filterRules(tournament, min, max)).sort((a, b) => a.buyIn - b.buyIn)
         if (filtered) {
-            filtered?.sort((a, b) => a.buyIn - b.buyIn)
             setTournamentList(filtered)
             setLoading(false)
         }
@@ -47,6 +49,7 @@ export const useTournaments = () => {
 
     return {
         loading,
+        error,
         tournamentList,
         selectedTournaments,
         addTournament,

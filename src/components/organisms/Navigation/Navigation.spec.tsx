@@ -1,7 +1,7 @@
-import { describe, it, expect, Mock, vi } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import { Navigation } from './Navigation'
 import { render } from '@testing-library/react'
-import { BrowserRouter, MemoryRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 
 describe('Navigation', () => {
     it('should display navigation', async () => {

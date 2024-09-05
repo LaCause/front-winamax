@@ -1,9 +1,9 @@
 import { Link, Location, useLocation } from "react-router-dom"
-import { ROUTES } from "../../../router"
 import iconHome from '/assets/icons/Home-Inactif.svg'
 import iconHomeActive from '/assets/icons/Home-Actif.svg'
 import iconReadMe from '/assets/icons/Readme-Inactif.svg'
 import iconReadMeActive from '/assets/icons/Readme-Actif.svg'
+import { ROUTES } from "../../../router/routes"
 
 const getNavigationIcon = (location: Location, route: ROUTES, icon:string, activeIcon: string,) => {
     return location.pathname === route ? activeIcon: icon
