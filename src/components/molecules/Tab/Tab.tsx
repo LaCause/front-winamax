@@ -1,7 +1,4 @@
-import flagFR from '/assets/flags/FR.png'
 import iconTick from '/assets/icons/tick.svg'
-import iconM from '/assets/icons/m.png'
-import iconF from '/assets/icons/f.png'
 import React, { useEffect, useState } from 'react'
 import iconToken from '/assets/icons/token.svg'
 import { TabProps } from './Tab.model'
@@ -29,7 +26,6 @@ export const Tab: React.FC<TabProps> = ({ hasInfoBox, tournament, addTournament,
     const border = active ? 'shadow-shadowTab' : null
 
     useEffect(() => {
-        console.log(tournament)
         if (active) {
             addTournament(tournament)
         } else {
@@ -43,7 +39,7 @@ export const Tab: React.FC<TabProps> = ({ hasInfoBox, tournament, addTournament,
             <section className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 ${border} cursor-pointer`}>
                 <div className='flex items-center'>
                     <span className='flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md'>
-                        <img className='object-contain' src={flagFR} width={15}/>
+                        <img className='object-contain' src={`/assets/flags/${tournament.flag}.png`} width={15}/>
                     </span>
                     <b className='font-archivoNarrowBold text-xl'>{tournament.name}</b>
                     {active && addTick(active)}
@@ -57,8 +53,9 @@ export const Tab: React.FC<TabProps> = ({ hasInfoBox, tournament, addTournament,
                         <time className='font-archivoNarrowSemiBold'>{formatDate(tournament.startDate)}</time>
                     </span>
                     <span className='flex w-1/2'>
-                        <img className='object-contain rounded-lg' src={iconM} width={20}/>
-                        <img className='object-contain rounded-lg' src={iconF} width={20}/>
+                        { tournament?.icons.map((icon) => (
+                            <img className='object-contain rounded-lg' src={`/assets/icons/${icon}.png`} width={20} />
+                        ))}
                     </span>
                     </div>
                     <div className='w-1/2 flex justify-between front)'>
