@@ -6,16 +6,6 @@
 
 #### Run project : yarn && yarn dev
 
+#### Run test : yarn && yarn test
+
 #### Pattern architecture front : Atomic Design
-
-### Libraries :
-
-- Tailwind : Optimisé pour l'atomic design, cela me permet d'imbriquer mes styles directement dans mon html.
-
-- I18next : Pour avoir mes clés de traduction par langues. Pratique aussi pour avoir le formatage des devises.
-
-- Vitest : Librairie pour les tests unitaires
-
-- Storybook : Utile pour les échangent avec les UI / UX
-
-- Istanbul : Pour generer des rapports de coverage
