@@ -5,6 +5,7 @@ export default {
   content: [
     './src/**/*.{tsx,js}',
   ],
+  darkMode: 'selector',
   theme: {
     extend: {
       animation: {

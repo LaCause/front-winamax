@@ -6,15 +6,19 @@ import { Modal } from '../../components/molecules/Modal/Modal'
 
 export const Home = () => {
   const { loading, tournamentList, selectedTournaments, addTournament, removeTournament, filterTournament, error } = useTournaments()
-
+  if (loading && error) {
+    return <>
+      <p className='text-primary-red text-center font-bold mt-2'>
+        {error}
+      </p>
+    </>
+  }
+    
   return <>
     <section className='flex flex-col px-3'>
       <div className='flex justify-center'>
         <img src={pokerBanner} className='rounded-3xl' />
       </div>
-      <p className='text-primary-red text-center font-bold mt-2'>
-        {error}
-      </p>
       <Modal header='Filtres' filterTournament={filterTournament} />
       <div>
         <ul className='flex flex-col gap-3'>
