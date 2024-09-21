@@ -1,4 +1,4 @@
 export enum ROUTES {
-    HOME = '/',
-    READ_ME = '/read_me'
+  HOME = '/',
+  READ_ME = '/read_me',
 }

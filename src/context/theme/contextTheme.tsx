@@ -1,9 +1,13 @@
 import React, { createContext, useState, ReactNode } from 'react';
 import { ThemeContextType } from './contextTheme.model';
 
-export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined,
+);
 
-export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const ThemeProvider: React.FC<{
+  children: ReactNode;
+}> = ({ children }) => {
   const [darkmode, setDarkmode] = useState(false);
 
   const toggleDarkMode = () => {
@@ -11,7 +15,12 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <ThemeContext.Provider value={{ darkmode, toggleDarkMode }}>
+    <ThemeContext.Provider
+      value={{
+        darkmode,
+        toggleDarkMode,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

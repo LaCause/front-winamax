@@ -2,17 +2,15 @@ import daisyui from 'daisyui';
 
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    './src/**/*.{tsx,js}',
-  ],
+  content: ['./src/**/*.{tsx,js}'],
   darkMode: 'selector',
   theme: {
     extend: {
       animation: {
-        moveFirstToken: "moveFirstToken 0.1s linear forwards",
-        moveSecondToken: "moveSecondToken 0.1s linear forwards",
-        moveThirdToken: "moveThirdToken 0.1s linear forwards",
-        moveThirdTokenReverse: 'moveThirdTokenReverse 0.1s linear forwards'
+        moveFirstToken: 'moveFirstToken 0.1s linear forwards',
+        moveSecondToken: 'moveSecondToken 0.1s linear forwards',
+        moveThirdToken: 'moveThirdToken 0.1s linear forwards',
+        moveThirdTokenReverse: 'moveThirdTokenReverse 0.1s linear forwards',
       },
       fontFamily: {
         archivoNarrow: ['ArchivoNarrow'],
@@ -21,7 +19,7 @@ export default {
         archivoMedium: ['ArchivoMedium'],
       },
       boxShadow: {
-        shadowTab: '0px 0px 0px 4px #33cc7f'
+        shadowTab: '0px 0px 0px 4px #33cc7f',
       },
       colors: {
         primary: {
@@ -31,10 +29,9 @@ export default {
           white: '#F0F1F5',
           green: '#33cc7f',
           darkgreen: '#145233',
-        }
-      }
+        },
+      },
     },
   },
   plugins: [daisyui],
-}
-
+};

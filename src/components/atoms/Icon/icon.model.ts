@@ -1,7 +1,6 @@
-export type IconName = 'home' | 'homeInactive' | 'readme' | 'readMeInactive'
+export type IconName = 'home' | 'homeInactive' | 'readme' | 'readMeInactive';
 
 export interface IconProps {
-    name: IconName
-    className?: string
+  name: IconName;
+  className?: string;
 }
-

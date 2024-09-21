@@ -36,32 +36,32 @@
 
 @keyframes moveFirstToken {
   0% {
-      transform: translateX(0%);
+    transform: translateX(0%);
   }
   100% {
-      transform: translateX(40px);
-      opacity: 1;
+    transform: translateX(40px);
+    opacity: 1;
   }
 }
 
 @keyframes moveFirstTokenReverse {
   0% {
-      transform: translateX(40px);
-      opacity: 1;
+    transform: translateX(40px);
+    opacity: 1;
   }
   100% {
-      transform: translateX(0px);
-      opacity: 0;
+    transform: translateX(0px);
+    opacity: 0;
   }
 }
 
 @keyframes moveSecondToken {
   0% {
-      transform: translateX(0px);
+    transform: translateX(0px);
   }
   100% {
-      transform: translateX(30px);
-      opacity: 1;
+    transform: translateX(30px);
+    opacity: 1;
   }
 }
 
@@ -78,11 +78,11 @@
 
 @keyframes moveThirdToken {
   0% {
-      transform: translateX(0px);
+    transform: translateX(0px);
   }
   100% {
-      transform: translateX(20px);
-      opacity: 1;
+    transform: translateX(20px);
+    opacity: 1;
   }
 }
 

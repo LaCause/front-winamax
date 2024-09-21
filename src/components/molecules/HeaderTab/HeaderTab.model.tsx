@@ -1,3 +1,3 @@
 export interface HeaderTabProps {
-    className?: string
+  className?: string;
 }

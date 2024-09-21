@@ -1,8 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
-import App from "../App";
-import { Home } from "../templates/Home/Home";
-import { ReadMe } from "../templates/ReadMe/ReadMe";
-import { ROUTES } from "./routes";
+import { createBrowserRouter } from 'react-router-dom';
+import App from '../App';
+import { Home } from '../templates/Home/Home';
+import { ReadMe } from '../templates/ReadMe/ReadMe';
+import { ROUTES } from './routes';
 
 const router = createBrowserRouter([
   {
@@ -17,8 +17,8 @@ const router = createBrowserRouter([
         path: ROUTES.READ_ME,
         Component: ReadMe,
       },
-    ]
+    ],
   },
-])
+]);
 
-export default router
+export default router;
