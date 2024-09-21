@@ -8,7 +8,7 @@ export const formatDate = (startDate: string) => {
   return (
     daysOfWeek[date.getDay()] +
     ' ' +
-    date.toLocaleTimeString('fr-FR', options as any)
+    date.toLocaleTimeString('fr-FR', options as Intl.DateTimeFormatOptions)
   );
 };
 

@@ -34,7 +34,8 @@ export const Tab: React.FC<TabProps> = ({
   const { firstAnimation, secondAnimation, thirdAnimation } =
     useAnimations(active);
 
-  const handleClick = (event: React.MouseEvent<HTMLLIElement>) => setActive(!active);
+  const handleClick = (event: React.MouseEvent<HTMLLIElement>) =>
+    setActive(!active);
   const border = active ? 'shadow-shadowTab' : null;
 
   useEffect(() => {
