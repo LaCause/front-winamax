@@ -9,3 +9,5 @@ export const formatDate = (startDate: string) => {
 }
 
 export const formatCurrency = (number: number) => new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(number);
+
+export const parseFromString = (element: string, type: DOMParserSupportedType) => new DOMParser().parseFromString(element, type)
