@@ -14,13 +14,6 @@ export const Home = () => {
     filterTournament,
     error,
   } = useTournaments();
-  if (loading && error) {
-    return (
-      <>
-        <p className="text-primary-red text-center font-bold mt-2">{error}</p>
-      </>
-    );
-  }
 
   return (
     <>

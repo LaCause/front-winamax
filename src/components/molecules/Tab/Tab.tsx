@@ -1,9 +1,8 @@
 import iconTick from '/assets/icons/tick.svg';
 import React, { useEffect, useState } from 'react';
-import iconToken from '/assets/icons/token.svg';
 import { TabProps } from './Tab.model';
 import { formatCurrency, formatDate } from '../../../utils';
-import { useAnimations } from '../../../hook/useAnimations/useAnimations';
+import PokerChips from '../../atoms/PokerChips/PokerChips';
 
 const addTick = (isActive: boolean) =>
   isActive ? (
@@ -31,11 +30,9 @@ export const Tab: React.FC<TabProps> = ({
   removeTournament,
 }) => {
   const [active, setActive] = useState<boolean>();
-  const { firstAnimation, secondAnimation, thirdAnimation } =
-    useAnimations(active);
 
-  const handleClick = (event: React.MouseEvent<HTMLLIElement>) =>
-    setActive(!active);
+  const handleClick = () => setActive(!active);
+
   const border = active ? 'shadow-shadowTab' : null;
 
   useEffect(() => {
@@ -51,7 +48,7 @@ export const Tab: React.FC<TabProps> = ({
       <li
         key={tournament.tournamentId + 1}
         className="relative"
-        onClick={(event) => handleClick(event)}
+        onClick={handleClick}
       >
         {addInfoBox(hasInfoBox)}
         <section
@@ -66,23 +63,12 @@ export const Tab: React.FC<TabProps> = ({
               />
             </span>
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
+            <PokerChips
+              className="ml-2 overflow-visible"
+              isAnimating={active}
+            />
             {active && addTick(active)}
           </div>
-          <img
-            src={iconToken}
-            width={25}
-            className={`animated-token opacity-0 ${firstAnimation}`}
-          />
-          <img
-            src={iconToken}
-            width={25}
-            className={`animated-token opacity-0 ${secondAnimation}`}
-          />
-          <img
-            src={iconToken}
-            width={25}
-            className={`animated-token opacity-0 ${thirdAnimation}`}
-          />
           <div className="flex">
             <div className="w-1/2 flex">
               <span className="w-1/2">
