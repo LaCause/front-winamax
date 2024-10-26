@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { MAX_TOURNAMENT_LIST, Tournament } from './useTournaments.model';
-import { filterRules } from './filterRules';
+import { useWorker } from '../useWorker/useWorker';
+
+// Filtrer les 350 premiers résultats : OK
+// partir des données des 350 premiers tournois présents sur la plateforme,
+// - l'utilisateur aimerait trouver l'ensemble des combinaisons de 3 tournois (triplets), dont le buy-in total est compris entre X et Y.
+// - Il n'est pas possible de mettre en triplet des tournois qui commencent à moins d'1h d'intervalle.
+// - Les résultats doivent être affichés par groupes de 3 tournois et triés par buy-in total croissant. - L'algorithme de détection des triplets doit être optimisé."
 
 export const useTournaments = () => {
   const [tournamentList, setTournamentList] = useState<Tournament[]>();
@@ -8,8 +14,16 @@ export const useTournaments = () => {
   const [selectedTournaments, setSelectedTournaments] = useState<Tournament[]>(
     [],
   );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<unknown>();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [min, setMin] = useState<number>(0);
+  const [max, setMax] = useState<number>(10000);
+
+  const onMessage = (data: any) => {
+    setTournamentList(data);
+    setIsProcessing(true);
+  };
+
+  const { runWorker } = useWorker(onMessage);
 
   const addTournament = (tournament: Tournament): void | Tournament[] => {
     setSelectedTournaments([...selectedTournaments, tournament]);
@@ -25,40 +39,34 @@ export const useTournaments = () => {
     });
   };
 
-  const filterTournament = (min: number, max: number) => {
-    if (min > max) return setError('Erreur sur les filtres');
-    const filtered = allTournamentList
-      ?.filter((tournament) => filterRules(tournament, min, max))
-      .sort((a, b) => a.buyIn - b.buyIn);
-    if (filtered) {
-      setTournamentList(filtered);
-      setLoading(false);
+  const filterTournament = (data: Tournament[]) => {
+    setMin(min);
+    setMax(max);
+    runWorker(data);
+  };
+
+  const loadData = async (): Promise<void> => {
+    const response = (await import('../../../sample-poker.json')).default;
+    if (response && response.length) {
+      setAllTournamentList(response);
+      setTournamentList(response.splice(0, MAX_TOURNAMENT_LIST));
+      setIsProcessing(false);
     }
   };
 
   useEffect(() => {
-    const loadData = async (): Promise<void> => {
-      const response = await fetch('/sample-poker.json');
-      const data = (await response.json()) as Tournament[];
-
-      if (response.ok && data.length) {
-        setAllTournamentList(data);
-        setTournamentList(data.splice(0, MAX_TOURNAMENT_LIST));
-        setLoading(false);
-      }
-    };
-    if (!tournamentList) {
-      loadData();
-    }
-  }, [selectedTournaments]);
+    loadData();
+  }, []);
 
   return {
-    loading,
-    error,
+    isProcessing,
     tournamentList,
     selectedTournaments,
+    allTournamentList,
     addTournament,
     removeTournament,
     filterTournament,
+    min,
+    max,
   };
 };

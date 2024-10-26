@@ -4,21 +4,26 @@ import { Home } from '../templates/Home/Home';
 import { ReadMe } from '../templates/ReadMe/ReadMe';
 import { ROUTES } from './routes';
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: ROUTES.HOME,
+      element: <App />,
+      children: [
+        {
+          path: ROUTES.HOME,
+          Component: Home,
+        },
+        {
+          path: ROUTES.READ_ME,
+          Component: ReadMe,
+        },
+      ],
+    },
+  ],
   {
-    path: ROUTES.HOME,
-    element: <App />,
-    children: [
-      {
-        path: ROUTES.HOME,
-        Component: Home,
-      },
-      {
-        path: ROUTES.READ_ME,
-        Component: ReadMe,
-      },
-    ],
+    // basename: 'front-winamax',
   },
-]);
+);
 
 export default router;

@@ -17,7 +17,7 @@ export const Header = () => {
             onClick={toggleDarkMode}
           />
           <label className="swap swap-rotate">
-            <input type="checkbox" checked={!darkmode} />
+            <input type="checkbox" checked={!darkmode} readOnly />
             <svg
               className="swap-on h-6 w-6 fill-slate-800"
               xmlns="http://www.w3.org/2000/svg"

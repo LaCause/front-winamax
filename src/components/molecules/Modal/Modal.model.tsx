@@ -1,5 +1,10 @@
+export interface ModalHandle {
+  openModal: () => void;
+  closeModal: () => void;
+}
 export interface ModalProps {
-  header?: string;
-  children?: React.ReactNode;
-  filterTournament: (min: number, max: number) => void;
+  isOpen: boolean;
+  header?: React.ReactNode;
+  content: React.ReactNode;
+  footer?: React.ReactNode;
 }
