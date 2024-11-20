@@ -5,6 +5,10 @@ export default {
   content: ['./src/**/*.{tsx,js}'],
   darkMode: 'selector',
   theme: {
+    screens: {
+      tablet: '640px',
+      desktop: '1280px',
+    },
     extend: {
       animation: {
         moveFirstToken: 'moveFirstToken 0.1s linear forwards',

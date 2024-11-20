@@ -1,63 +1,46 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { ModalProps } from './Modal.model';
-import { formatCurrency } from '../../../utils';
-import { TOURNAMENT_PRICES } from '../../../hook/useTournaments/useTournaments.model';
+import { forwardRef, useEffect, useRef } from 'react';
+import { ModalHandle, ModalProps } from './Modal.model';
 
-export const Modal: React.FC<ModalProps> = ({ header, filterTournament }) => {
-  const modalRef = useRef<HTMLDialogElement | null>(null);
+export const Modal = forwardRef<ModalHandle, ModalProps>(
+  ({ isOpen, header, content, footer }) => {
+    const modalRef = useRef<HTMLDialogElement | null>(null);
 
-  const openModal = () => {
-    modalRef.current?.showModal();
-  };
+    useEffect(() => {
+      if (isOpen) {
+        modalRef.current?.showModal();
+      } else {
+        modalRef.current?.close();
+      }
+    }, [isOpen]);
 
-  const [currentMinPrice, setCurrentMinPrice] = useState<number>(1);
-  const [currentMaxPrice, setCurrentMaxPrice] = useState<number>(10000);
-
-  useEffect(() => {
-    if (currentMinPrice > currentMaxPrice) {
-      setCurrentMaxPrice(currentMinPrice);
-    }
-  }, [currentMinPrice, currentMaxPrice]);
-
-  return (
-    <>
-      <button className="btn mt-2" onClick={openModal}>
-        <b>{header}</b>
-      </button>
-      <dialog ref={modalRef} id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <section className="flex gap-x-7">
-            <label>
-              Prix min : {formatCurrency(currentMinPrice)}
-              <input
-                type="range"
-                min={TOURNAMENT_PRICES.MIN}
-                max={TOURNAMENT_PRICES.MAX}
-                className="range range-primary"
-                onChange={(e) => setCurrentMinPrice(parseInt(e.target.value))}
-              />
-            </label>
-            <label>
-              Prix max : {formatCurrency(currentMaxPrice)}
-              <input
-                type="range"
-                min={currentMinPrice}
-                max={TOURNAMENT_PRICES.MAX}
-                className="range range-primary"
-                onChange={(e) => setCurrentMaxPrice(parseInt(e.target.value))}
-              />
-            </label>
-          </section>
-          <form method="dialog" className="text-center mt-4">
-            <button
-              className="btn"
-              onClick={() => filterTournament(currentMinPrice, currentMaxPrice)}
+    return (
+      <dialog ref={modalRef} className="modal">
+        <div className="modal-box px-4 py-1">
+          {header && (
+            <section
+              id="header"
+              className="text-center text-xl font-bold py-3 text-white"
             >
-              Valider
-            </button>
-          </form>
+              {header}
+            </section>
+          )}
+
+          {content && (
+            <section
+              id="content"
+              className="flex flex-col justify-center gap-3 "
+            >
+              {content}
+            </section>
+          )}
+
+          {footer && (
+            <>
+              <section id="footer">{footer}</section>
+            </>
+          )}
         </div>
       </dialog>
-    </>
-  );
-};
+    );
+  },
+);
