@@ -3,26 +3,29 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main  # Branche principale à surveiller pour le déploiement
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
+    - name: Set up Git user
+      run: |
+        git config --global user.email "your-email@example.com"
+        git config --global user.name "Your Name"
 
     - name: Install dependencies
-      run: |
-        yarn install
+      run: yarn install
 
-    - name: Build and deploy
+    - name: Build project
+      run: yarn build
+
+    - name: Deploy to GitHub Pages
       run: |
-        git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-        yarn run deploy
+        git add dist
+        git commit -m "Deploy to GitHub Pages"
+        git push origin gh-pages
