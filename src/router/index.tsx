@@ -22,7 +22,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    // basename: 'front-winamax',
+    basename: '/front-winamax',
   },
 );
 

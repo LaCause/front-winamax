@@ -3,30 +3,35 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main
+      - main # ou la branche que vous voulez utiliser pour le déploiement
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
+      # Vérifie le code depuis le dépôt
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Git user
-        run: |
-          git config --global user.email "your-email@example.com"
-          git config --global user.name "Your Name"
+      # Installe Node.js et Yarn
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20' # Spécifiez la version Node.js
 
+      # Installe les dépendances avec Yarn
       - name: Install dependencies
         run: yarn install
 
-      - name: Build project
+      # Crée l'application React (build)
+      - name: Build the project
         run: yarn build
 
+      # Déploie sur GitHub Pages
       - name: Deploy to GitHub Pages
-        run: |
-          git config user.name "LaCause"
-          git config user.email "yanis.sahnoune.dev@gmail.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/LaCause/front-winamax.git
-          gh-pages -d dist
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages # Branche de déploiement
+          folder: dist # Dossier contenant le build (si vous utilisez React, c'est généralement "build")
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

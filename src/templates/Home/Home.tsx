@@ -10,6 +10,7 @@ import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange'
 import { DoubleRangeHandle } from '../../components/molecules/DoubleRange/DoubleRange.model';
 
 export const Home = () => {
+  console.log('Home.tsx', window.location.pathname);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
