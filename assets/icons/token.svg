@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" fill="purple">
+  <!-- Ombre externe -->
+  <circle cx="100" cy="100" r="90" fill="rgba(0,0,0,0.2)" />
+
+  <!-- Cercle extérieur rouge avec dégradé -->
+  <circle cx="100" cy="100" r="80" fill="url(#redGradient)" stroke="#b71c1c" stroke-width="8" />
+
+  <!-- Dégradé radial pour l'effet brillant -->
+  <defs>
+    <radialGradient id="redGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ff5252;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d32f2f;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Décorations intérieures blanches -->
+  <circle cx="100" cy="100" r="65" fill="none" stroke="#fff" stroke-width="10" />
+  <circle cx="100" cy="100" r="50" fill="#d32f2f" />
+
+  <!-- Motif du jeton avec un effet brillant -->
+  <rect x="95" y="20" width="10" height="20" fill="#fff" rx="5" />
+  <rect x="95" y="160" width="10" height="20" fill="#fff" rx="5" />
+  <rect x="20" y="95" width="20" height="10" fill="#fff" rx="5" />
+  <rect x="160" y="95" width="20" height="10" fill="#fff" rx="5" />
+  
+  <!-- Diagonales blanches avec effet brillant -->
+  <rect x="40" y="40" width="20" height="10" transform="rotate(-45 100 100)" fill="#fff" rx="5" />
+  <rect x="140" y="40" width="20" height="10" transform="rotate(45 100 100)" fill="#fff" rx="5" />
+  <rect x="40" y="140" width="20" height="10" transform="rotate(45 100 100)" fill="#fff" rx="5" />
+  <rect x="140" y="140" width="20" height="10" transform="rotate(-45 100 100)" fill="#fff" rx="5" />
+
+  <!-- Brillance sur le bord du jeton -->
+  <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="6" stroke-dasharray="5,15" />
+
+  <!-- Centre du jeton avec effet de profondeur -->
+  <circle cx="100" cy="100" r="25" fill="url(#centerGradient)" />
+
+  <!-- Dégradé radial pour le centre -->
+  <defs>
+    <radialGradient id="centerGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ff8a80;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b71c1c;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+</svg>
