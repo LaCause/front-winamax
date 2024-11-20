@@ -26,4 +26,7 @@ jobs:
 
       - name: Deploy to GitHub Pages
         run: |
-          yarn deploy
+          git config user.name "LaCause"
+          git config user.email "yanis.sahnoune.dev@gmail.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/LaCause/front-winamax.git
+          gh-pages -d dist
