@@ -24,8 +24,3 @@ jobs:
 
           # Authentification GitHub avec GITHUB_TOKEN
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
-
-          # Déployer sur GitHub Pages
-          git add .
-          git commit -m "Deploy generated files"
-          git push
