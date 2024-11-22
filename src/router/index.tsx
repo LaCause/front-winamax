@@ -4,6 +4,8 @@ import { Home } from '../templates/Home/Home';
 import { ReadMe } from '../templates/ReadMe/ReadMe';
 import { ROUTES } from './routes';
 
+export const BASENAME = '/front-winamax';
+
 const router = createBrowserRouter(
   [
     {
@@ -22,7 +24,7 @@ const router = createBrowserRouter(
     },
   ],
   {
-    basename: '/front-winamax',
+    basename: BASENAME,
   },
 );
 

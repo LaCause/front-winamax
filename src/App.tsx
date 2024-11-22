@@ -5,7 +5,6 @@ import { Header } from './components/organisms/Header/Header';
 import { useTheme } from './hook/useTheme/useTheme';
 
 function App() {
-  console.log('App.tsx', window.location.pathname);
   const { darkmode } = useTheme();
 
   return (

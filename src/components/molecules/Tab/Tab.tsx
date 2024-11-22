@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TabProps } from './Tab.model';
 import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
+import { ImageComponent } from '../../atoms/Image/Image';
 
 const addTick = (isActive: boolean) =>
   isActive ? (
@@ -56,10 +57,10 @@ export const Tab: React.FC<TabProps> = ({
         >
           <div className="flex items-center">
             <span className="flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
-              <img
-                className="object-contain"
-                src={`/assets/flags/${tournament.flag}.png`}
+              <ImageComponent
                 width={15}
+                height={15}
+                src={`/assets/flags/${tournament.flag}.png`}
               />
             </span>
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
@@ -78,11 +79,14 @@ export const Tab: React.FC<TabProps> = ({
               </span>
               <span className="flex w-1/2">
                 {tournament?.icons.map((icon) => (
-                  <img
-                    className="object-contain rounded-lg"
-                    src={`/assets/icons/${icon}.png`}
-                    width={20}
-                  />
+                  <>
+                    <ImageComponent
+                      className="object-contain rounded-lg"
+                      width={20}
+                      height={20}
+                      src={`/assets/icons/${icon}.png`}
+                    />
+                  </>
                 ))}
               </span>
             </div>
