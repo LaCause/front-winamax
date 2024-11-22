@@ -69,7 +69,6 @@ ctx.onmessage = async (event: MessageEvent<any>) => {
     console.error(
       "Erreur : data.tournaments est mal défini ou n'est pas un tableau",
     );
-    console.log('Données reçues :', data);
     return; // Sortie anticipée pour éviter les erreurs
   }
 
