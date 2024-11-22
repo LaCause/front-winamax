@@ -4,6 +4,7 @@ import { TabProps } from './Tab.model';
 import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
+import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
 
 const addTick = (isActive: boolean) =>
   isActive ? (
@@ -18,7 +19,7 @@ const addTick = (isActive: boolean) =>
 const addInfoBox = (hasInfoBox: TabProps['hasInfoBox']) =>
   hasInfoBox ? (
     <>
-      <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] -z-10 h-[45px] text-black -mt-[20px]">
+      <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
         <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
       </section>
     </>
@@ -27,27 +28,21 @@ const addInfoBox = (hasInfoBox: TabProps['hasInfoBox']) =>
 export const Tab: React.FC<TabProps> = ({
   hasInfoBox,
   tournament,
-  addTournament,
-  removeTournament,
+  isActive,
+  onActiveTab,
 }) => {
-  const [active, setActive] = useState<boolean>();
+  const [activeTab, setActiveTab] = useState<number | null>(null);
 
-  const handleClick = () => setActive(!active);
+  const handleClick = () => {
+    onActiveTab(!isActive, tournament); // Exécuté après que `active` soit mis à jour
+  };
 
-  const border = active ? 'shadow-shadowTab' : null;
-
-  useEffect(() => {
-    if (active) {
-      addTournament(tournament);
-    } else {
-      removeTournament(tournament);
-    }
-  }, [active]);
+  const border = isActive ? 'shadow-shadowTab' : null;
 
   return (
     <>
       <li
-        key={tournament.tournamentId + 1}
+        key={tournament.tournamentId}
         className="relative"
         onClick={handleClick}
       >
@@ -66,9 +61,9 @@ export const Tab: React.FC<TabProps> = ({
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
             <PokerChips
               className="ml-2 overflow-visible"
-              isAnimating={active}
+              isAnimating={isActive}
             />
-            {active && addTick(active)}
+            {isActive && addTick(isActive)}
           </div>
           <div className="flex">
             <div className="w-1/2 flex">

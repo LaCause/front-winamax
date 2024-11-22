@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MAX_TOURNAMENT_LIST, Tournament } from './useTournaments.model';
 import { useWorker } from '../useWorker/useWorker';
+import { useResolvedPath } from 'react-router-dom';
 
 // Filtrer les 350 premiers résultats : OK
 // partir des données des 350 premiers tournois présents sur la plateforme,
@@ -46,11 +47,11 @@ export const useTournaments = () => {
   };
 
   const loadData = async (): Promise<void> => {
-    const response = (await import('../../../sample-poker.json')).default;
-    if (response && response.length) {
-      setAllTournamentList(response);
-      setTournamentList(response.splice(0, MAX_TOURNAMENT_LIST));
-      setIsProcessing(false);
+    const response = await fetch('./sample-poker.json');
+    const tournaments: Tournament[] = await response.json();
+    if (tournaments && tournaments.length) {
+      setAllTournamentList(tournaments);
+      setTournamentList(tournaments.splice(0, MAX_TOURNAMENT_LIST));
     }
   };
 

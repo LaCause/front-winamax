@@ -3,16 +3,22 @@ import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
 import { useTournaments } from '../../hook/useTournaments/useTournaments';
 import { Modal } from '../../components/molecules/Modal/Modal';
 import { useRef, useState } from 'react';
-import { TabList } from '../../components/organisms/TabList/TabList';
 import { ModalHandle } from '../../components/molecules/Modal/Modal.model';
 import { formatCurrency } from '../../utils';
 import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange';
 import { DoubleRangeHandle } from '../../components/molecules/DoubleRange/DoubleRange.model';
+import { WithListStructure } from '../../hocs/withListStructure/withListStructure';
+import {
+  ListStructure,
+  StructureTypes,
+} from '../../components/molecules/ListStructure/ListStructure';
+import { Tournament } from '../../hook/useTournaments/useTournaments.model';
 
 export const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
+
+  const DynamicListComponent = WithListStructure(ListStructure);
 
   const {
     tournamentList,
@@ -32,6 +38,16 @@ export const Home = () => {
   };
   const handleRangeChange = (values: { min: number; max: number }) => {
     setRangeValues(values);
+  };
+
+  const handleSelectedTournament = (active: boolean, item: Tournament) => {
+    console.log(active);
+    console.log(selectedTournaments);
+    if (!active) {
+      addTournament(item);
+    } else {
+      removeTournament(item);
+    }
   };
 
   return (
@@ -87,12 +103,13 @@ export const Home = () => {
         <div>
           <ul className="flex flex-col gap-3">
             <HeaderTab className="mt-3" />
-            <TabList
-              loading={isProcessing}
-              addTournament={addTournament}
-              removeTournament={removeTournament}
-              selectedTournaments={selectedTournaments}
-              tournamentList={tournamentList}
+            <DynamicListComponent
+              props={{
+                items: tournamentList!,
+                type: StructureTypes.GRID,
+                onClick: (active, item) =>
+                  handleSelectedTournament(active, item),
+              }}
             />
           </ul>
         </div>
