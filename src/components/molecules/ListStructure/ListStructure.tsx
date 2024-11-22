@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
-import { TabList } from '../../organisms/TabList/TabList';
 import { Tab } from '../Tab/Tab';
 
 export enum StructureTypes {
@@ -17,7 +16,7 @@ type ListStructureType =
 export interface ListStructure {
   type: ListStructureType;
   items: Tournament[];
-  onClick: (active: boolean, item: Tournament) => void;
+  onClick?: (item: number[]) => void;
 }
 
 export const ListStructure: React.FC<ListStructure> = ({
@@ -30,8 +29,14 @@ export const ListStructure: React.FC<ListStructure> = ({
   const handleActiveTab = (active: boolean, item: Tournament) => {
     setActiveTab((prevActiveTab) => {
       if (active) {
+        if (onClick) {
+          onClick([...prevActiveTab, item.tournamentId]);
+        }
         return [...prevActiveTab, item.tournamentId];
       } else {
+        if (onClick) {
+          onClick(prevActiveTab.filter((id) => id !== item.tournamentId));
+        }
         return prevActiveTab.filter((id) => id !== item.tournamentId);
       }
     });

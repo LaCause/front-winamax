@@ -15,7 +15,7 @@ export const useTournaments = () => {
   const [selectedTournaments, setSelectedTournaments] = useState<Tournament[]>(
     [],
   );
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(true);
   const [min, setMin] = useState<number>(0);
   const [max, setMax] = useState<number>(10000);
 
@@ -40,10 +40,10 @@ export const useTournaments = () => {
     });
   };
 
-  const filterTournament = (data: Tournament[]) => {
-    setMin(min);
-    setMax(max);
-    runWorker(data);
+  const runFilter = (data: Tournament[]) => {
+    // setMin(min);
+    // setMax(max);
+    // runWorker(data);
   };
 
   const loadData = async (): Promise<void> => {
@@ -52,6 +52,7 @@ export const useTournaments = () => {
     if (tournaments && tournaments.length) {
       setAllTournamentList(tournaments);
       setTournamentList(tournaments.splice(0, MAX_TOURNAMENT_LIST));
+      setIsProcessing(false);
     }
   };
 
@@ -66,7 +67,7 @@ export const useTournaments = () => {
     allTournamentList,
     addTournament,
     removeTournament,
-    filterTournament,
+    runFilter,
     min,
     max,
   };
