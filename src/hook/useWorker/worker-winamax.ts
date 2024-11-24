@@ -63,19 +63,16 @@ const findTriple = (
   });
 };
 
+const dataLoaded = [] as Tournament[];
+
 ctx.onmessage = async (event: MessageEvent<any>) => {
   const data = event.data;
-  if (!data || !data.tournaments || !Array.isArray(data.tournaments)) {
-    console.error(
-      "Erreur : data.tournaments est mal défini ou n'est pas un tableau",
-    );
-    return; // Sortie anticipée pour éviter les erreurs
+  if (!data) console.log('Erreur dans le worker ');
+
+  if (!dataLoaded.length) {
+    dataLoaded.push(data);
   }
 
-  // Exemple de traitement : multiplie chaque élément par 2
-  const processedData = findTriple(data.tournaments, data.min, data.max);
-  // const processedData = data;
-
   // Envoie le résultat au thread principal
-  ctx.postMessage(processedData);
+  ctx.postMessage(dataLoaded);
 };

@@ -12,9 +12,10 @@ import {
   ListStructure,
   StructureTypes,
 } from '../../components/molecules/ListStructure/ListStructure';
+import { useWorker } from '../../hook/useWorker/useWorker';
 
 export const Home = () => {
-  const { isProcessing, tournamentList, runFilter } = useTournaments();
+  const { isProcessing, tournamentList } = useTournaments();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
@@ -38,6 +39,7 @@ export const Home = () => {
         <div className="flex justify-center">
           <img src={pokerBanner} className="rounded-3xl" />
         </div>
+        {tournamentList && tournamentList.length > 0 && tournamentList[0]?.name}
         <button className="btn btn-active mt-2" onClick={toggleModal}>
           Ouvrir les filtres
         </button>
@@ -83,12 +85,14 @@ export const Home = () => {
         <div>
           <ul className="flex flex-col gap-3">
             <HeaderTab className="mt-3" />
-            <DynamicListComponent
-              props={{
-                items: tournamentList!,
-                type: StructureTypes.GRID,
-              }}
-            />
+            {tournamentList && (
+              <DynamicListComponent
+                props={{
+                  items: tournamentList,
+                  type: StructureTypes.GRID,
+                }}
+              />
+            )}
           </ul>
         </div>
       </section>

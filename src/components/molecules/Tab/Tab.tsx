@@ -31,10 +31,8 @@ export const Tab: React.FC<TabProps> = ({
   isActive,
   onActiveTab,
 }) => {
-  const [activeTab, setActiveTab] = useState<number | null>(null);
-
   const handleClick = () => {
-    onActiveTab(!isActive, tournament); // Exécuté après que `active` soit mis à jour
+    onActiveTab(!isActive, tournament);
   };
 
   const border = isActive ? 'shadow-shadowTab' : null;
@@ -73,16 +71,17 @@ export const Tab: React.FC<TabProps> = ({
                 </time>
               </span>
               <span className="flex w-1/2">
-                {tournament?.icons.map((icon) => (
-                  <>
-                    <ImageComponent
-                      className="object-contain rounded-lg"
-                      width={20}
-                      height={20}
-                      src={`/assets/icons/${icon}.png`}
-                    />
-                  </>
-                ))}
+                {tournament.icons &&
+                  tournament?.icons.map((icon) => (
+                    <>
+                      <ImageComponent
+                        className="object-contain rounded-lg"
+                        width={20}
+                        height={20}
+                        src={`/assets/icons/${icon}.png`}
+                      />
+                    </>
+                  ))}
               </span>
             </div>
             <div className="w-1/2 flex justify-between front)">

@@ -43,10 +43,12 @@ export const ListStructure: React.FC<ListStructure> = ({
   };
 
   if (type === StructureTypes.GRID) {
+    console.log('items  :', items);
     return (
       <>
         {items.length &&
           items?.map((item, id) => {
+            console.log(item);
             return (
               <>
                 <Tab

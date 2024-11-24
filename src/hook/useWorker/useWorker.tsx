@@ -1,8 +1,10 @@
 // useWorker.js
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState, useCallback } from 'react';
 import { Tournament } from '../useTournaments/useTournaments.model';
 
 export const useWorker = (onMessage: any) => {
+  const [data, setData] = useState<Tournament[]>();
+  const [isProcessing, setIsProcessing] = useState(true);
   const workerRef = useRef<Worker>();
 
   useEffect(() => {
@@ -12,12 +14,9 @@ export const useWorker = (onMessage: any) => {
         type: 'module',
       },
     );
-    workerRef.current.onmessage = (e) => onMessage(e.data);
 
-    return () => {
-      workerRef?.current?.terminate();
-    };
-  }, [onMessage]);
+    workerRef.current.onmessage = (e) => onMessage(e.data);
+  }, []);
 
   const runWorker = (data: Tournament[]) => {
     if (workerRef.current) {
@@ -25,5 +24,22 @@ export const useWorker = (onMessage: any) => {
     }
   };
 
-  return { runWorker };
+  const stopWorker = () => {
+    workerRef.current?.terminate();
+  };
+
+  const loadData = useCallback(async () => {
+    const response = await fetch('./sample-poker.json');
+    const tournaments = await response.json();
+    if (tournaments) {
+      setData(tournaments);
+      onMessage(tournaments);
+    }
+  }, [data]);
+
+  const getData = useCallback(() => {
+    return data;
+  }, [data]);
+
+  return { runWorker, stopWorker, loadData, getData };
 };
