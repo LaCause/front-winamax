@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  ListStructure,
-  StructureTypes,
-} from '../../components/molecules/ListStructure/ListStructure';
+import { ListStructure } from '../../components/molecules/ListStructure/ListStructure';
 
 export const WithListStructure = (
   Component: React.ComponentType<any>,

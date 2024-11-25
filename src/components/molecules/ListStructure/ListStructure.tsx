@@ -26,40 +26,31 @@ export const ListStructure: React.FC<ListStructure> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<number[]>([]);
 
-  const handleActiveTab = (active: boolean, item: Tournament) => {
+  const handleActiveTab = (active: boolean, item?: Tournament) => {
+    if (!item || !item.tournamentId) return;
     setActiveTab((prevActiveTab) => {
-      if (active) {
-        if (onClick) {
-          onClick([...prevActiveTab, item.tournamentId]);
-        }
-        return [...prevActiveTab, item.tournamentId];
-      } else {
-        if (onClick) {
-          onClick(prevActiveTab.filter((id) => id !== item.tournamentId));
-        }
-        return prevActiveTab.filter((id) => id !== item.tournamentId);
-      }
+      const updatedTab = active
+        ? [...prevActiveTab, item.tournamentId]
+        : prevActiveTab.filter((id) => id !== item.tournamentId);
+
+      onClick?.(updatedTab);
+      return updatedTab;
     });
   };
 
-  if (type === StructureTypes.GRID) {
-    console.log('items  :', items);
+  if (type === StructureTypes.GRID && items?.length) {
     return (
       <>
-        {items.length &&
-          items?.map((item, id) => {
-            console.log(item);
-            return (
-              <>
-                <Tab
-                  key={id}
-                  onActiveTab={handleActiveTab}
-                  isActive={activeTab.includes(item.tournamentId)}
-                  tournament={item}
-                />
-              </>
-            );
-          })}
+        {items.map((item, id) =>
+          item ? (
+            <Tab
+              key={id}
+              onActiveTab={handleActiveTab}
+              isActive={activeTab.includes(item.tournamentId)}
+              tournament={item}
+            />
+          ) : null,
+        )}
       </>
     );
   }

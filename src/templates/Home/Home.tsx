@@ -12,55 +12,48 @@ import {
   ListStructure,
   StructureTypes,
 } from '../../components/molecules/ListStructure/ListStructure';
-import { useWorker } from '../../hook/useWorker/useWorker';
 
 export const Home = () => {
   const { isProcessing, tournamentList } = useTournaments();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
-
-  const modalFilterRef = useRef<ModalHandle>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [minPrice, setMinPrice] = useState<number>(0);
+  const [maxPrice, setMaxPrice] = useState<number>(10000);
+  const modalRef = useRef<ModalHandle>(null);
   const doubleRangeRef = useRef<DoubleRangeHandle>(null);
 
   const DynamicListComponent = WithListStructure(ListStructure, isProcessing);
 
-  const toggleModal = () => setIsModalOpen((prev) => !prev);
-  const handleModalClick = () => {
-    setIsModalOpen(false);
-  };
-  const handleRangeChange = (values: { min: number; max: number }) => {
-    setRangeValues(values);
+  const toggleModal = () => setIsOpen((prev) => !prev);
+  const closeModal = () => setIsOpen(false);
+  const handlePriceChange = (values: { min: number; max: number }) => {
+    setMinPrice(values.min);
+    setMaxPrice(values.max);
   };
 
   return (
     <>
-      <section className="flex flex-col px-3">
-        <div className="flex justify-center">
-          <img src={pokerBanner} className="rounded-3xl" />
-        </div>
-        {tournamentList && tournamentList.length > 0 && tournamentList[0]?.name}
-        <button className="btn btn-active mt-2" onClick={toggleModal}>
+      <section className="flex flex-col gap-3 px-3">
+        <img src={pokerBanner} className="rounded-3xl" />
+        {tournamentList && tournamentList.length > 0 && (
+          <h1 className="text-2xl font-bold">{tournamentList[0]?.name}</h1>
+        )}
+        <button className="btn" onClick={toggleModal}>
           Ouvrir les filtres
         </button>
         <Modal
-          ref={modalFilterRef}
-          isOpen={isModalOpen}
+          ref={modalRef}
+          isOpen={isOpen}
           header={<h2 className="tracking-wider capitalize">Filtres</h2>}
           content={
             <>
               <div className="flex justify-center gap-x-3">
                 <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  BuyIn min. :
-                  <b className="text-white ml-1">
-                    {formatCurrency(rangeValues.min)}
-                  </b>
+                  Prix min. :
+                  <b className="text-white ml-1">{formatCurrency(minPrice)}</b>
                 </div>
                 <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  BuyIn max. :
-                  <b className="text-white ml-1">
-                    {formatCurrency(rangeValues.max)}
-                  </b>
+                  Prix max. :
+                  <b className="text-white ml-1">{formatCurrency(maxPrice)}</b>
                 </div>
               </div>
               <form method="dialog" className="flex flex-col text-center">
@@ -68,12 +61,12 @@ export const Home = () => {
                   ref={doubleRangeRef}
                   min={0}
                   max={10000}
-                  onChange={handleRangeChange}
+                  onChange={handlePriceChange}
                 />
                 <div className="mt-7">
                   <button
                     className="btn border-1 border-primary-red bg-slate-950 my-3 text-white"
-                    onClick={handleModalClick}
+                    onClick={closeModal}
                   >
                     Valider
                   </button>

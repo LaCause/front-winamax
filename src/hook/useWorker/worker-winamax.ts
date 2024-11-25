@@ -70,9 +70,8 @@ ctx.onmessage = async (event: MessageEvent<any>) => {
   if (!data) console.log('Erreur dans le worker ');
 
   if (!dataLoaded.length) {
-    dataLoaded.push(data);
+    dataLoaded.push(...data);
   }
 
-  // Envoie le résultat au thread principal
   ctx.postMessage(dataLoaded);
 };

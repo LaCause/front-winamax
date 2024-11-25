@@ -2,7 +2,7 @@ import { forwardRef, useEffect, useRef } from 'react';
 import { ModalHandle, ModalProps } from './Modal.model';
 
 export const Modal = forwardRef<ModalHandle, ModalProps>(
-  ({ isOpen, header, content, footer }) => {
+  ({ isOpen, header, content, footer }, ref) => {
     const modalRef = useRef<HTMLDialogElement | null>(null);
 
     useEffect(() => {
