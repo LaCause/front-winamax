@@ -2,19 +2,18 @@ import pokerBanner from '/images/tournois.jpg';
 import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
 import { useTournaments } from '../../hook/useTournaments/useTournaments';
 import { Modal } from '../../components/molecules/Modal/Modal';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ModalHandle } from '../../components/molecules/Modal/Modal.model';
 import { formatCurrency } from '../../utils';
 import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange';
 import { DoubleRangeHandle } from '../../components/molecules/DoubleRange/DoubleRange.model';
 import { WithListStructure } from '../../hocs/withListStructure/withListStructure';
-import {
-  ListStructure,
-  StructureTypes,
-} from '../../components/molecules/ListStructure/ListStructure';
+import { ListStructure } from '../../components/molecules/ListStructure/ListStructure';
+import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
 
 export const Home = () => {
-  const { isProcessing, tournamentList } = useTournaments();
+  const { isProcessing, tournamentList, runWorkerWithFilter } =
+    useTournaments();
   const [isOpen, setIsOpen] = useState(false);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(10000);
@@ -24,7 +23,11 @@ export const Home = () => {
   const DynamicListComponent = WithListStructure(ListStructure, isProcessing);
 
   const toggleModal = () => setIsOpen((prev) => !prev);
-  const closeModal = () => setIsOpen(false);
+
+  const applyFilter = () => {
+    runWorkerWithFilter();
+    setIsOpen(false);
+  };
   const handlePriceChange = (values: { min: number; max: number }) => {
     setMinPrice(values.min);
     setMaxPrice(values.max);
@@ -34,9 +37,6 @@ export const Home = () => {
     <>
       <section className="flex flex-col gap-3 px-3">
         <img src={pokerBanner} className="rounded-3xl" />
-        {tournamentList && tournamentList.length > 0 && (
-          <h1 className="text-2xl font-bold">{tournamentList[0]?.name}</h1>
-        )}
         <button className="btn" onClick={toggleModal}>
           Ouvrir les filtres
         </button>
@@ -66,7 +66,7 @@ export const Home = () => {
                 <div className="mt-7">
                   <button
                     className="btn border-1 border-primary-red bg-slate-950 my-3 text-white"
-                    onClick={closeModal}
+                    onClick={applyFilter}
                   >
                     Valider
                   </button>

@@ -1,22 +1,23 @@
 import iconTick from '/assets/icons/tick.svg';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TabProps } from './Tab.model';
 import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
-import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
 
-const addTick = (isActive: boolean) =>
+export const addTick = (isActive: boolean): React.ReactElement | null =>
   isActive ? (
     <>
       <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
-        <img className="mr-1" src={iconTick} width={15} />
+        <img className="mr-1" src={iconTick} width={15} alt="tick" />
         <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
       </span>
     </>
   ) : null;
 
-const addInfoBox = (hasInfoBox: TabProps['hasInfoBox']) =>
+const addInfoBox = (
+  hasInfoBox: boolean | undefined,
+): React.ReactElement | null =>
   hasInfoBox ? (
     <>
       <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
@@ -72,15 +73,14 @@ export const Tab: React.FC<TabProps> = ({
               </span>
               <span className="flex w-1/2">
                 {tournament.icons &&
-                  tournament?.icons.map((icon) => (
-                    <>
-                      <ImageComponent
-                        className="object-contain rounded-lg"
-                        width={20}
-                        height={20}
-                        src={`/assets/icons/${icon}.png`}
-                      />
-                    </>
+                  tournament?.icons.map((icon, index) => (
+                    <ImageComponent
+                      key={index}
+                      className="object-contain rounded-lg"
+                      width={20}
+                      height={20}
+                      src={`/assets/icons/${icon}.png`}
+                    />
                   ))}
               </span>
             </div>

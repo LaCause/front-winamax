@@ -1,6 +1,15 @@
+import { W } from 'vitest/dist/chunks/reporters.C_zwCd4j.js';
 import { Tournament } from '../useTournaments/useTournaments.model';
+import { WorkerMessage } from './useWorker';
 
 const ctx: Worker = self as any;
+
+export enum WorkerMessageTypes {
+  LOAD_DATA = 'LOAD_DATA',
+  FILTER_DATA = 'FILTER_DATA',
+  CLEAR_DATA = 'CLEAR_DATA',
+  REFRESH_DATA = 'REFRESH_DATA',
+}
 
 const isValidTriple = (
   firstTournament: Tournament,
@@ -65,13 +74,18 @@ const findTriple = (
 
 const dataLoaded = [] as Tournament[];
 
-ctx.onmessage = async (event: MessageEvent<any>) => {
+ctx.onmessage = async (event: MessageEvent<WorkerMessage>) => {
   const data = event.data;
-  if (!data) console.log('Erreur dans le worker ');
+  if (!data) throw new Error('No data');
 
-  if (!dataLoaded.length) {
-    dataLoaded.push(...data);
+  const isRefresh = event.data.type === WorkerMessageTypes.REFRESH_DATA;
+  const isLoaded = event.data.type === WorkerMessageTypes.LOAD_DATA;
+
+  if (isRefresh || isLoaded) {
+    dataLoaded.push(...event.data.data);
+    ctx.postMessage({
+      type: event.data.type,
+      data: dataLoaded,
+    });
   }
-
-  ctx.postMessage(dataLoaded);
 };

@@ -1,40 +1,34 @@
 import { useState } from 'react';
 import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
 import { Tab } from '../Tab/Tab';
+import { ListStructureInterface, StructureTypes } from './ListStructure.model';
 
-export enum StructureTypes {
-  GRID = 'grid',
-  LIST = 'list',
-  TRIPLE = 'triple',
-}
-
-type ListStructureType =
-  | StructureTypes.GRID
-  | StructureTypes.LIST
-  | StructureTypes.TRIPLE;
-
-export interface ListStructure {
-  type: ListStructureType;
-  items: Tournament[];
-  onClick?: (item: number[]) => void;
-}
-
-export const ListStructure: React.FC<ListStructure> = ({
+export const ListStructure: React.FC<ListStructureInterface> = ({
   type,
   items,
   onClick,
 }) => {
   const [activeTab, setActiveTab] = useState<number[]>([]);
 
-  const handleActiveTab = (active: boolean, item?: Tournament) => {
-    if (!item || !item.tournamentId) return;
-    setActiveTab((prevActiveTab) => {
-      const updatedTab = active
-        ? [...prevActiveTab, item.tournamentId]
-        : prevActiveTab.filter((id) => id !== item.tournamentId);
+  /**
+   * Handles the click event of a tab. If the tab is active, the tournament id
+   * is added to the active tabs array. If the tab is inactive, the tournament id
+   * is removed from the active tabs array.
+   *
+   * @param {boolean} active - Whether the tab is active or not.
+   * @param {Tournament | undefined} tournament - The tournament object associated with the tab.
+   * @returns {void}
+   */
+  const handleTabClick = (active: boolean, tournament?: Tournament): void => {
+    if (!tournament?.tournamentId) return;
 
-      onClick?.(updatedTab);
-      return updatedTab;
+    setActiveTab((prevActiveTabs: number[]) => {
+      const updatedActiveTabs = active
+        ? [...prevActiveTabs, tournament.tournamentId]
+        : prevActiveTabs.filter((id) => id !== tournament.tournamentId);
+
+      onClick?.(updatedActiveTabs);
+      return updatedActiveTabs;
     });
   };
 
@@ -45,7 +39,7 @@ export const ListStructure: React.FC<ListStructure> = ({
           item ? (
             <Tab
               key={id}
-              onActiveTab={handleActiveTab}
+              onActiveTab={handleTabClick}
               isActive={activeTab.includes(item.tournamentId)}
               tournament={item}
             />
