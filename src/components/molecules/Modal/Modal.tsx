@@ -1,9 +1,18 @@
-import { forwardRef, useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { ModalHandle, ModalProps } from './Modal.model';
 
 export const Modal = forwardRef<ModalHandle, ModalProps>(
   ({ isOpen, header, content, footer }, ref) => {
     const modalRef = useRef<HTMLDialogElement | null>(null);
+
+    useImperativeHandle(ref, () => ({
+      openModal() {
+        modalRef.current?.showModal();
+      },
+      closeModal() {
+        modalRef.current?.close();
+      },
+    }));
 
     useEffect(() => {
       if (isOpen) {
@@ -14,7 +23,12 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
     }, [isOpen]);
 
     return (
-      <dialog ref={modalRef} className="modal">
+      <dialog
+        ref={modalRef}
+        id="my_modal"
+        className="modal"
+        onCancel={() => console.log('test')}
+      >
         <div className="modal-box px-4 py-1">
           {header && (
             <section

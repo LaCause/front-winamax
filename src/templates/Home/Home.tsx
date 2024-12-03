@@ -12,22 +12,22 @@ import { ListStructure } from '../../components/molecules/ListStructure/ListStru
 import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
 
 export const Home = () => {
-  const { isProcessing, tournamentList, runWorkerWithFilter } =
-    useTournaments();
+  const { processing, tournaments, filterData, error } = useTournaments();
   const [isOpen, setIsOpen] = useState(false);
   const [minPrice, setMinPrice] = useState<number>(0);
   const [maxPrice, setMaxPrice] = useState<number>(10000);
   const modalRef = useRef<ModalHandle>(null);
   const doubleRangeRef = useRef<DoubleRangeHandle>(null);
 
-  const DynamicListComponent = WithListStructure(ListStructure, isProcessing);
+  const DynamicListComponent = WithListStructure(ListStructure, processing);
 
-  const toggleModal = () => setIsOpen((prev) => !prev);
-
-  const applyFilter = () => {
-    runWorkerWithFilter();
-    setIsOpen(false);
+  const applyFilter = async () => {
+    const test = await filterData([{ code: 'price', value: 'test' }]);
+    if (!error) {
+      modalRef.current?.closeModal();
+    }
   };
+
   const handlePriceChange = (values: { min: number; max: number }) => {
     setMinPrice(values.min);
     setMaxPrice(values.max);
@@ -37,7 +37,7 @@ export const Home = () => {
     <>
       <section className="flex flex-col gap-3 px-3">
         <img src={pokerBanner} className="rounded-3xl" />
-        <button className="btn" onClick={toggleModal}>
+        <button className="btn" onClick={modalRef.current?.openModal}>
           Ouvrir les filtres
         </button>
         <Modal
@@ -56,7 +56,11 @@ export const Home = () => {
                   <b className="text-white ml-1">{formatCurrency(maxPrice)}</b>
                 </div>
               </div>
-              <form method="dialog" className="flex flex-col text-center">
+              <form
+                method="dialog"
+                className="flex flex-col text-center"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <DoubleRange
                   ref={doubleRangeRef}
                   min={0}
@@ -70,6 +74,7 @@ export const Home = () => {
                   >
                     Valider
                   </button>
+                  <p className="text-primary-red">{error}</p>
                 </div>
               </form>
             </>
@@ -78,10 +83,10 @@ export const Home = () => {
         <div>
           <ul className="flex flex-col gap-3">
             <HeaderTab className="mt-3" />
-            {tournamentList && (
+            {tournaments && (
               <DynamicListComponent
                 props={{
-                  items: tournamentList,
+                  items: tournaments,
                   type: StructureTypes.GRID,
                 }}
               />

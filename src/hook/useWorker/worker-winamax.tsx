@@ -22,6 +22,8 @@ const isValidTriple = (
     new Date(thirdTournament.startDate),
   ];
 
+  Math.hypot;
+
   return (
     Math.abs(times[0].getTime() - times[1].getTime()) >= 3600000 &&
     Math.abs(times[0].getTime() - times[2].getTime()) >= 3600000 &&
@@ -59,6 +61,7 @@ const findTriple = (
           totalBuyIn <= max &&
           isValidTriple(firstTournament, secondTournament, thirdTournament)
         ) {
+          console.log('triple found');
           result.push([firstTournament, secondTournament, thirdTournament]);
         }
       }
@@ -80,6 +83,16 @@ ctx.onmessage = async (event: MessageEvent<WorkerMessage>) => {
 
   const isRefresh = event.data.type === WorkerMessageTypes.REFRESH_DATA;
   const isLoaded = event.data.type === WorkerMessageTypes.LOAD_DATA;
+  const isFilter = event.data.type === WorkerMessageTypes.FILTER_DATA;
+
+  if (isFilter) {
+    // const test = data.data ? await findTriple(data.data, 10, 20) : undefined;
+    // console.log('findTriple', dataLoaded);
+    ctx.postMessage({
+      type: event.data.type,
+      data: WorkerMessageTypes.FILTER_DATA,
+    });
+  }
 
   if (isRefresh || isLoaded) {
     dataLoaded.push(...event.data.data);

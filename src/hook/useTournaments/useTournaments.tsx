@@ -1,16 +1,13 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MAX_TOURNAMENT_LIST, Tournament } from './useTournaments.model';
-import { useWorker, WorkerMessage } from '../useWorker/useWorker';
+import { QueryFilter, useWorker, WorkerMessage } from '../useWorker/useWorker';
 import { WorkerMessageTypes } from '../useWorker/worker-winamax';
 
-export const useTournaments = (): {
-  isProcessing: boolean;
-  tournamentList?: Tournament[];
-  runWorkerWithFilter: () => void;
-} => {
+export const useTournaments = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>();
   const [workerCalled, setWorkerCalled] = useState(false);
-  const [processing, setProcessing] = useState(true);
+  const [processing, setProcessing] = useState(false);
+  const [error, setError] = useState<string>();
 
   const handleWorkerMessage = ({
     type = WorkerMessageTypes.LOAD_DATA,
@@ -18,6 +15,7 @@ export const useTournaments = (): {
   }: WorkerMessage): void => {
     switch (type) {
       case WorkerMessageTypes.FILTER_DATA: {
+        setProcessing(false);
         break;
       }
       default:
@@ -29,10 +27,17 @@ export const useTournaments = (): {
     }
   };
 
-  const { runWorker, loadData, getData, clearWorker } =
-    useWorker(handleWorkerMessage);
+  const { loadData, getData, runWorker } = useWorker(handleWorkerMessage);
 
-  const runWorkerWithFilter = () => {};
+  const filterData = (filters?: QueryFilter[]) => {
+    if (!filters || !filters?.length) return setError('No filters');
+    setProcessing(true);
+    runWorker({
+      type: WorkerMessageTypes.FILTER_DATA,
+      query: filters,
+      data: getData(),
+    });
+  };
 
   useEffect(() => {
     if (!getData() && !tournaments) {
@@ -46,8 +51,9 @@ export const useTournaments = (): {
   }, [tournaments]);
 
   return {
-    isProcessing: processing,
-    tournamentList: tournaments,
-    runWorkerWithFilter,
+    processing,
+    tournaments,
+    error,
+    filterData,
   };
 };
