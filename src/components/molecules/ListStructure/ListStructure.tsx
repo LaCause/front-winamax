@@ -47,6 +47,8 @@ export const ListStructure: React.FC<ListStructureInterface> = ({
         )}
       </>
     );
+  } else if (type === StructureTypes.TRIPLE && items?.length) {
+    return <p>TRIPLE</p>;
   }
   return <>LIST</>;
 };

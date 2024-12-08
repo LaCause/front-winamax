@@ -2,7 +2,7 @@ import pokerBanner from '/images/tournois.jpg';
 import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
 import { useTournaments } from '../../hook/useTournaments/useTournaments';
 import { Modal } from '../../components/molecules/Modal/Modal';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { ModalHandle } from '../../components/molecules/Modal/Modal.model';
 import { formatCurrency } from '../../utils';
 import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange';
@@ -18,6 +18,11 @@ export const Home = () => {
   const [maxPrice, setMaxPrice] = useState<number>(10000);
   const modalRef = useRef<ModalHandle>(null);
   const doubleRangeRef = useRef<DoubleRangeHandle>(null);
+
+  // @TODO: Add tinder with bet logic :
+  // -> Swipe left / right : Team 1 vs Team 2
+  // -> Swipe up / down : Team 1 vs Team 3
+  // -> Swipe down / up : Team 2 vs Team 3
 
   const DynamicListComponent = WithListStructure(ListStructure, processing);
 

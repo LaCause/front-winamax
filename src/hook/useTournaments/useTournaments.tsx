@@ -5,7 +5,6 @@ import { WorkerMessageTypes } from '../useWorker/worker-winamax';
 
 export const useTournaments = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>();
-  const [workerCalled, setWorkerCalled] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [error, setError] = useState<string>();
 
@@ -19,7 +18,7 @@ export const useTournaments = () => {
         break;
       }
       default:
-        if (data && data.length) {
+        if (data) {
           setTournaments(data.slice(0, MAX_TOURNAMENT_LIST));
           setProcessing(false);
         }
@@ -27,7 +26,7 @@ export const useTournaments = () => {
     }
   };
 
-  const { loadData, getData, runWorker } = useWorker(handleWorkerMessage);
+  const { getData, runWorker } = useWorker(handleWorkerMessage);
 
   const filterData = (filters?: QueryFilter[]) => {
     if (!filters || !filters?.length) return setError('No filters');
@@ -38,17 +37,6 @@ export const useTournaments = () => {
       data: getData(),
     });
   };
-
-  useEffect(() => {
-    if (!getData() && !tournaments) {
-      loadData();
-    }
-
-    if (!workerCalled && tournaments && tournaments.length > 0) {
-      setProcessing(false);
-      setWorkerCalled(true);
-    }
-  }, [tournaments]);
 
   return {
     processing,

@@ -73,12 +73,8 @@ export const useWorker = (onMessage: (data: WorkerMessage) => void) => {
         data: tournaments,
       });
       setData(tournaments);
-      onMessage({
-        type: WorkerMessageTypes.LOAD_DATA,
-        data: tournaments,
-      });
     }
-  }, [data]);
+  }, []);
 
   const getData = useCallback(() => {
     return data;
@@ -92,13 +88,15 @@ export const useWorker = (onMessage: (data: WorkerMessage) => void) => {
       },
     );
 
+    loadData();
     workerRef.current.onmessage = (event) => {
+      console.log('EVENT', event);
       onMessage({
         type: event.data.type,
-        data: event.data,
+        data: event.data.data,
       });
     };
-  }, [runWorker]);
+  }, []);
 
   return { runWorker, clearWorker, loadData, getData };
 };
