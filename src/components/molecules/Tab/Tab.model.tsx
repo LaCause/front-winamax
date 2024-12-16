@@ -1,4 +1,4 @@
-import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
+import { Tournament } from '../../../hook/useWorker/useWorker.model';
 
 export interface TabProps {
   isActive?: boolean;

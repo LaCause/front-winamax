@@ -1,4 +1,4 @@
-import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
+import { Tournament, Triple } from '../../../hook/useWorker/useWorker.model';
 
 export enum StructureTypes {
   GRID = 'grid',
@@ -13,6 +13,6 @@ type ListStructureType =
 
 export interface ListStructureInterface {
   type: ListStructureType;
-  items: Tournament[];
+  items: Tournament[] | Triple;
   onClick?: (item: number[]) => void;
 }

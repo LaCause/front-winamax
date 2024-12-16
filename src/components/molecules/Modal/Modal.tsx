@@ -1,8 +1,8 @@
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { ModalHandle, ModalProps } from './Modal.model';
 
 export const Modal = forwardRef<ModalHandle, ModalProps>(
-  ({ isOpen, header, content, footer }, ref) => {
+  ({ header, content, footer }, ref) => {
     const modalRef = useRef<HTMLDialogElement | null>(null);
 
     useImperativeHandle(ref, () => ({
@@ -13,14 +13,6 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
         modalRef.current?.close();
       },
     }));
-
-    useEffect(() => {
-      if (isOpen) {
-        modalRef.current?.showModal();
-      } else {
-        modalRef.current?.close();
-      }
-    }, [isOpen]);
 
     return (
       <dialog

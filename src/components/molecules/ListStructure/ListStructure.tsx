@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
 import { Tab } from '../Tab/Tab';
 import { ListStructureInterface, StructureTypes } from './ListStructure.model';
+import { Tournament, Triple } from '../../../hook/useWorker/useWorker.model';
 
 export const ListStructure: React.FC<ListStructureInterface> = ({
   type,
@@ -10,15 +10,6 @@ export const ListStructure: React.FC<ListStructureInterface> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<number[]>([]);
 
-  /**
-   * Handles the click event of a tab. If the tab is active, the tournament id
-   * is added to the active tabs array. If the tab is inactive, the tournament id
-   * is removed from the active tabs array.
-   *
-   * @param {boolean} active - Whether the tab is active or not.
-   * @param {Tournament | undefined} tournament - The tournament object associated with the tab.
-   * @returns {void}
-   */
   const handleTabClick = (active: boolean, tournament?: Tournament): void => {
     if (!tournament?.tournamentId) return;
 
@@ -33,9 +24,10 @@ export const ListStructure: React.FC<ListStructureInterface> = ({
   };
 
   if (type === StructureTypes.GRID && items?.length) {
+    const grid = items as Tournament[];
     return (
       <>
-        {items.map((item, id) =>
+        {grid.map((item, id) =>
           item ? (
             <Tab
               key={id}
@@ -48,7 +40,33 @@ export const ListStructure: React.FC<ListStructureInterface> = ({
       </>
     );
   } else if (type === StructureTypes.TRIPLE && items?.length) {
-    return <p>TRIPLE</p>;
+    const triple = items as Triple;
+
+    return (
+      <>
+        <section className="flex flex-col gap-5">
+          {triple.map((tournaments, index) => (
+            <div key={index} className="flex flex-col gap-2">
+              <h2>Group {index + 1}</h2>
+              {tournaments
+                ? tournaments.map((tournament, id) => (
+                    <Tab
+                      key={id}
+                      onActiveTab={handleTabClick}
+                      isActive={activeTab.includes(tournament.tournamentId)}
+                      tournament={tournament}
+                    />
+                  ))
+                : null}
+            </div>
+          ))}
+        </section>
+      </>
+    );
   }
-  return <>LIST</>;
+  return (
+    <>
+      <p className="text-center">Aucun résultats</p>
+    </>
+  );
 };

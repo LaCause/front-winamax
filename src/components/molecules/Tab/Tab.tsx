@@ -54,7 +54,7 @@ export const Tab: React.FC<TabProps> = ({
               <ImageComponent
                 width={15}
                 height={15}
-                src={`/assets/flags/${tournament.flag}.png`}
+                src={`../../assets/flags/${tournament.flag}.png`}
               />
             </span>
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
@@ -79,7 +79,7 @@ export const Tab: React.FC<TabProps> = ({
                       className="object-contain rounded-lg"
                       width={20}
                       height={20}
-                      src={`/assets/icons/${icon}.png`}
+                      src={`../../assets/icons/${icon}.png`}
                     />
                   ))}
               </span>

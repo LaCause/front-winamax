@@ -10,7 +10,7 @@ export const WithListStructure = (
   }: {
     props: ListStructureInterface;
   }) => {
-    if (loading) return <>Loading...</>;
+    if (loading) return <>LOADING ...</>;
     if (items) return <Component type={type} items={items} onClick={onClick} />;
   };
 };

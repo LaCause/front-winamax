@@ -1,42 +1,61 @@
 import pokerBanner from '/images/tournois.jpg';
-import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
-import { useTournaments } from '../../hook/useTournaments/useTournaments';
 import { Modal } from '../../components/molecules/Modal/Modal';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ModalHandle } from '../../components/molecules/Modal/Modal.model';
-import { formatCurrency } from '../../utils';
+import { formatCurrency, formatFiltersToQuery } from '../../utils';
 import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange';
-import { DoubleRangeHandle } from '../../components/molecules/DoubleRange/DoubleRange.model';
 import { WithListStructure } from '../../hocs/withListStructure/withListStructure';
 import { ListStructure } from '../../components/molecules/ListStructure/ListStructure';
-import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
+import { useWorker } from '../../hook/useWorker/useWorker';
+import { useFilters } from '../../hook/useFilters/useFilters';
+import { Controller, useForm } from 'react-hook-form';
+import { FilterInput } from '../../hook/useFilters/useFilters.model';
+import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
+import { debounce } from 'lodash';
+import {
+  WORKER_KEY,
+  WorkerMessageTypes,
+} from '../../hook/useWorker/useWorker.model';
+
+//@TODO : add @typescript-eslint/parser @typescript-eslint/eslint-plugin
+// add to linter form typescript coverage
+
+// @TODO: Add tinder with bet logic :
+// -> Swipe left / right : Team 1 vs Team 2
+// -> Swipe up / down : Team 1 vs Team 3
+// -> Swipe down / up : Team 2 vs Team 3
 
 export const Home = () => {
-  const { processing, tournaments, filterData, error } = useTournaments();
-  const [isOpen, setIsOpen] = useState(false);
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(10000);
+  const { data, processing, runWorkerMessage } = useWorker();
+  const { updateFilters, resetFilters, hasQueryFilters } = useFilters();
+  const { control, handleSubmit, setValue, getValues, register } =
+    useForm<FilterInput>();
+
+  const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
+  const min = useMemo(() => formatCurrency(rangeValues.min), [rangeValues.min]);
+  const max = useMemo(() => formatCurrency(rangeValues.max), [rangeValues.max]);
+
   const modalRef = useRef<ModalHandle>(null);
-  const doubleRangeRef = useRef<DoubleRangeHandle>(null);
-
-  // @TODO: Add tinder with bet logic :
-  // -> Swipe left / right : Team 1 vs Team 2
-  // -> Swipe up / down : Team 1 vs Team 3
-  // -> Swipe down / up : Team 2 vs Team 3
-
-  const DynamicListComponent = WithListStructure(ListStructure, processing);
 
   const applyFilter = async () => {
-    const test = await filterData([{ code: 'price', value: 'test' }]);
-    if (!error) {
-      modalRef.current?.closeModal();
-    }
+    const formValues = getValues();
+    const query = formatFiltersToQuery(formValues);
+    updateFilters(query);
+    runWorkerMessage({
+      key: WORKER_KEY,
+      type: WorkerMessageTypes.FILTER_DATA,
+      query,
+    });
+    modalRef.current?.closeModal();
   };
 
-  const handlePriceChange = (values: { min: number; max: number }) => {
-    setMinPrice(values.min);
-    setMaxPrice(values.max);
-  };
+  const handleRangeChange = debounce((values) => {
+    setValue('buyIn.min', values.min);
+    setValue('buyIn.max', values.max);
+    setRangeValues(values);
+  }, 300);
+
+  const DynamicListComponent = WithListStructure(ListStructure, processing);
 
   return (
     <>
@@ -45,41 +64,63 @@ export const Home = () => {
         <button className="btn" onClick={modalRef.current?.openModal}>
           Ouvrir les filtres
         </button>
+        {hasQueryFilters && (
+          <button
+            className="btn btn-ghost border-gray-300 text-primary-red"
+            onClick={resetFilters}
+          >
+            Reset
+          </button>
+        )}
         <Modal
           ref={modalRef}
-          isOpen={isOpen}
           header={<h2 className="tracking-wider capitalize">Filtres</h2>}
           content={
             <>
               <div className="flex justify-center gap-x-3">
                 <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  Prix min. :
-                  <b className="text-white ml-1">{formatCurrency(minPrice)}</b>
+                  Prix min. :<b className="text-white ml-1">{min}</b>
                 </div>
                 <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  Prix max. :
-                  <b className="text-white ml-1">{formatCurrency(maxPrice)}</b>
+                  Prix max. :<b className="text-white ml-1">{max}</b>
                 </div>
               </div>
               <form
                 method="dialog"
                 className="flex flex-col text-center"
-                onSubmit={(e) => e.preventDefault()}
+                onSubmit={(e) => handleSubmit(applyFilter)(e)}
               >
-                <DoubleRange
-                  ref={doubleRangeRef}
-                  min={0}
-                  max={10000}
-                  onChange={handlePriceChange}
+                <Controller
+                  name="buyIn"
+                  control={control}
+                  render={({ field }) => (
+                    <DoubleRange
+                      {...field}
+                      min={0}
+                      max={10000}
+                      onChange={handleRangeChange}
+                    />
+                  )}
                 />
+
+                <div className="form-control mt-5">
+                  <label className="label cursor-pointer">
+                    <span className="label-text">Remember me</span>
+                    <input
+                      {...register('triple')}
+                      type="checkbox"
+                      className="checkbox checkbox-primary"
+                    />
+                  </label>
+                </div>
                 <div className="mt-7">
                   <button
                     className="btn border-1 border-primary-red bg-slate-950 my-3 text-white"
-                    onClick={applyFilter}
+                    type="submit"
                   >
                     Valider
                   </button>
-                  <p className="text-primary-red">{error}</p>
+                  {/* <p className="text-primary-red">{error}</p> */}
                 </div>
               </form>
             </>
@@ -88,11 +129,11 @@ export const Home = () => {
         <div>
           <ul className="flex flex-col gap-3">
             <HeaderTab className="mt-3" />
-            {tournaments && (
+            {data && data.data && (
               <DynamicListComponent
                 props={{
-                  items: tournaments,
-                  type: StructureTypes.GRID,
+                  items: data.data.slice(0, 60),
+                  type: data.listStructure,
                 }}
               />
             )}
