@@ -5,27 +5,6 @@ import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
 
-export const addTick = (isActive: boolean): React.ReactElement | null =>
-  isActive ? (
-    <>
-      <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
-        <img className="mr-1" src={iconTick} width={15} alt="tick" />
-        <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
-      </span>
-    </>
-  ) : null;
-
-const addInfoBox = (
-  hasInfoBox: boolean | undefined,
-): React.ReactElement | null =>
-  hasInfoBox ? (
-    <>
-      <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
-        <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
-      </section>
-    </>
-  ) : null;
-
 export const Tab: React.FC<TabProps> = ({
   hasInfoBox,
   tournament,
@@ -36,8 +15,6 @@ export const Tab: React.FC<TabProps> = ({
     onActiveTab(!isActive, tournament);
   };
 
-  const border = isActive ? 'shadow-shadowTab' : null;
-
   return (
     <>
       <li
@@ -45,9 +22,15 @@ export const Tab: React.FC<TabProps> = ({
         className="relative"
         onClick={handleClick}
       >
-        {addInfoBox(hasInfoBox)}
+        {hasInfoBox && (
+          <>
+            <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
+              <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
+            </section>
+          </>
+        )}
         <section
-          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 ${border} cursor-pointer`}
+          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 cursor-pointer ${isActive ? 'shadow-shadowTab' : null}`}
         >
           <div className="flex items-center">
             <span className="flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
@@ -62,7 +45,14 @@ export const Tab: React.FC<TabProps> = ({
               className="ml-2 overflow-visible"
               isAnimating={isActive}
             />
-            {isActive && addTick(isActive)}
+            {isActive && (
+              <>
+                <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
+                  <img className="mr-1" src={iconTick} width={15} alt="tick" />
+                  <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
+                </span>
+              </>
+            )}
           </div>
           <div className="flex">
             <div className="w-1/2 flex">

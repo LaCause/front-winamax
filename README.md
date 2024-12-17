@@ -1,17 +1,49 @@
 # Test technique - Winamax - Yanis Sahnoune
 
-#### Package manager : Yarn
+![Yarn](https://img.shields.io/badge/Package_Manager-Yarn-blue?style=flat-square)
+![Node Version](https://img.shields.io/badge/Node-v20.15.0-green?style=flat-square)
+![Run Project](https://img.shields.io/badge/Run_Project-yarn_&&_yarn_dev-yellow?style=flat-square)
+![Run Test](https://img.shields.io/badge/Run_Test-yarn_&&_yarn_test-yellowgreen?style=flat-square)
+![Architecture](https://img.shields.io/badge/Architecture-Atomic_Design-orange?style=flat-square)
 
-#### Node version : v20.15.0
+---
 
-#### Run project : yarn && yarn dev
+### Fonctionnalités implémentées :
 
-#### Run test : yarn && yarn test
+- ✅ **Filtrer les 350 premiers résultats** : OK
+- ✅ **Combinaisons de 3 tournois (triplets)** :
+  - Buy-in total compris entre **X et Y**
+  - Exclusion des tournois ayant moins d'1h d'intervalle entre leurs débuts
+  - Affichage des résultats par **groupes de 3** tournois
+  - Tri des résultats par **buy-in total croissant**
+  - **Optimisation** de l'algorithme de détection des triplets
 
-#### Pattern architecture front : Atomic Design
+---
 
-// Filtrer les 350 premiers résultats : OK
-// partir des données des 350 premiers tournois présents sur la plateforme,
-// - l'utilisateur aimerait trouver l'ensemble des combinaisons de 3 tournois (triplets), dont le buy-in total est compris entre X et Y.
-// - Il n'est pas possible de mettre en triplet des tournois qui commencent à moins d'1h d'intervalle.
-// - Les résultats doivent être affichés par groupes de 3 tournois et triés par buy-in total croissant. - L'algorithme de détection des triplets doit être optimisé."
+### 📋 Instructions pour exécuter le projet :
+
+1. Assurez-vous d'avoir **Yarn** et **Node v20.15.0** installés.
+2. Clonez le projet :
+   ```bash
+   git clone <URL_DU_PROJET>
+   ```
+3. Installez les dépendances :
+   ```bash
+   yarn
+   ```
+4. Lancez le projet :
+   ```bash
+   yarn dev
+   ```
+
+### 🧪 Instructions pour lancer les tests :
+
+```bash
+yarn test
+```
+
+---
+
+### 🛠️ Architecture du Projet :
+
+Le projet suit le **Pattern Architecture Atomic Design**, ce qui permet de construire une interface modulaire et réutilisable.

@@ -1,16 +1,19 @@
 import React from 'react';
 import { ListStructureInterface } from '../../components/molecules/ListStructure/ListStructure.model';
 
-export const WithListStructure = (
-  Component: React.ComponentType<any>,
-  loading: boolean,
+type WithLoadingProps<T> = {
+  loading: boolean;
+  props: T;
+};
+
+export const WithListStructure = <T extends ListStructureInterface>(
+  Component: React.ComponentType<T>,
 ) => {
-  return ({
-    props: { type, items, onClick },
-  }: {
-    props: ListStructureInterface;
-  }) => {
+  return ({ loading, props }: WithLoadingProps<T>) => {
+    console.log('HOCS');
+    console.log(loading);
+    console.log('//////', props.items.slice(0, 1));
     if (loading) return <>LOADING ...</>;
-    if (items) return <Component type={type} items={items} onClick={onClick} />;
+    return <Component {...props} />;
   };
 };

@@ -15,7 +15,8 @@ import { debounce } from 'lodash';
 import {
   WORKER_KEY,
   WorkerMessageTypes,
-} from '../../hook/useWorker/useWorker.model';
+} from '../../hook/useWorker/useWokrer.const';
+import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
 
 //@TODO : add @typescript-eslint/parser @typescript-eslint/eslint-plugin
 // add to linter form typescript coverage
@@ -45,6 +46,7 @@ export const Home = () => {
       key: WORKER_KEY,
       type: WorkerMessageTypes.FILTER_DATA,
       query,
+      listStructure: StructureTypes.LIST,
     });
     modalRef.current?.closeModal();
   };
@@ -55,7 +57,7 @@ export const Home = () => {
     setRangeValues(values);
   }, 300);
 
-  const DynamicListComponent = WithListStructure(ListStructure, processing);
+  const DynamicListComponent = WithListStructure(ListStructure);
 
   return (
     <>
@@ -131,8 +133,9 @@ export const Home = () => {
             <HeaderTab className="mt-3" />
             {data && data.data && (
               <DynamicListComponent
+                loading={processing}
                 props={{
-                  items: data.data.slice(0, 60),
+                  items: data.data,
                   type: data.listStructure,
                 }}
               />

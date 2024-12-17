@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 
 export const DoubleRange = React.memo(
   forwardRef<DoubleRangeHandle, DoubleRangeProps>(
-    ({ min, max, onChange }, ref) => {
+    ({ min, max, onChange }, _ref) => {
       const [currentMinBuyIn, setCurrentMinBuyIn] = useState<number>(min);
       const [currentMaxBuyIn, setCurrentMaxBuyIn] = useState<number>(max);
 
@@ -17,13 +17,13 @@ export const DoubleRange = React.memo(
         [currentMaxBuyIn],
       );
 
-      const handleMinPrice = (e: any) => {
+      const handleMinPrice = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = Math.min(Number(e.target.value), currentMaxBuyIn - 1);
         setCurrentMinBuyIn(value);
         debouncedOnChange({ min: value, max: currentMaxBuyIn });
       };
 
-      const handleMaxPrice = (e: any) => {
+      const handleMaxPrice = (e: React.ChangeEvent<HTMLInputElement>): void => {
         const value = Math.max(Number(e.target.value), currentMinBuyIn + 1);
         setCurrentMaxBuyIn(value);
         debouncedOnChange({ min: currentMinBuyIn, max: value });
