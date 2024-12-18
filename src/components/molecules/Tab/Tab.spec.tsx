@@ -1,4 +1,4 @@
-import { render, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import { render, fireEvent, cleanup } from '@testing-library/react';
 import { Tab } from './Tab';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { Tournament } from '../../../hook/useWorker/useWorker.model';

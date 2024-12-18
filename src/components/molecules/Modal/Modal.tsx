@@ -20,7 +20,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
         role="dialog"
         id="my_modal"
         className="modal"
-        onCancel={() => console.log('test')}
+        onBlur={() => modalRef.current?.close()}
       >
         <div className="modal-box px-4 py-1">
           {header && (

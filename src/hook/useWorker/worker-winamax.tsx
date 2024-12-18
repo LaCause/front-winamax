@@ -94,7 +94,6 @@ ctx.onmessage = async (event) => {
   switch (event.data.type) {
     case WorkerMessageTypes.LOAD_DATA: {
       initialData.push(...event.data.data);
-      console.log('POST MESSAGE');
       ctx.postMessage({
         key: WORKER_KEY,
         listStructure: StructureTypes.GRID,
@@ -127,7 +126,6 @@ ctx.onmessage = async (event) => {
       break;
     }
     default:
-      console.log('END SWICH');
       break;
   }
 };

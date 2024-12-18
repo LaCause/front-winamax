@@ -10,8 +10,8 @@ describe('Modal', () => {
     HTMLDialogElement.prototype.close = vi.fn();
   });
   beforeEach(() => {
-    cleanup(); // Nettoie le DOM entre les tests
-    vi.clearAllMocks(); // Réinitialise tous les mocks de vitest
+    cleanup();
+    vi.clearAllMocks();
   });
   it('rend les bons enfants', () => {
     const header = <div>Header</div>;
