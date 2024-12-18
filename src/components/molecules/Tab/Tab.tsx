@@ -5,39 +5,34 @@ import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
 
-export const Tab: React.FC<TabProps> = ({
-  hasInfoBox,
-  tournament,
-  isActive,
-  onActiveTab,
-}) => {
-  const handleClick = () => {
-    onActiveTab(!isActive, tournament);
-  };
+export const Tab = React.memo(
+  ({ tournament, isActive, hasInfoBox, onActiveTab }: TabProps) => {
+    const handleClick = () => {
+      onActiveTab?.(!isActive, tournament);
+    };
 
-  return (
-    <>
+    return (
       <li
         key={tournament.tournamentId}
         className="relative"
         onClick={handleClick}
       >
         {hasInfoBox && (
-          <>
-            <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
-              <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
-            </section>
-          </>
+          <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
+            <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
+          </section>
         )}
         <section
-          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 cursor-pointer ${isActive ? 'shadow-shadowTab' : null}`}
+          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 cursor-pointer ${
+            isActive ? 'shadow-shadowTab' : ''
+          }`}
         >
           <div className="flex items-center">
-            <span className="flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
+            <span className="flex justify-center py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
               <ImageComponent
                 width={15}
                 height={15}
-                src={`../../assets/flags/${tournament.flag}.png`}
+                src={`/assets/flags/${tournament.flag}.png`}
               />
             </span>
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
@@ -46,12 +41,10 @@ export const Tab: React.FC<TabProps> = ({
               isAnimating={isActive}
             />
             {isActive && (
-              <>
-                <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
-                  <img className="mr-1" src={iconTick} width={15} alt="tick" />
-                  <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
-                </span>
-              </>
+              <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
+                <img className="mr-1" src={iconTick} width={15} alt="tick" />
+                <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
+              </span>
             )}
           </div>
           <div className="flex">
@@ -62,19 +55,18 @@ export const Tab: React.FC<TabProps> = ({
                 </time>
               </span>
               <span className="flex w-1/2">
-                {tournament.icons &&
-                  tournament?.icons.map((icon, index) => (
-                    <ImageComponent
-                      key={index}
-                      className="object-contain rounded-lg"
-                      width={20}
-                      height={20}
-                      src={`../../assets/icons/${icon}.png`}
-                    />
-                  ))}
+                {tournament.icons?.map((icon, index) => (
+                  <ImageComponent
+                    key={index}
+                    className="object-contain rounded-lg"
+                    width={20}
+                    height={20}
+                    src={`/assets/icons/${icon}.png`}
+                  />
+                ))}
               </span>
             </div>
-            <div className="w-1/2 flex justify-between front)">
+            <div className="w-1/2 flex justify-between">
               <p className="font-archivoNarrow">{tournament.limit}</p>
               <p className="font-archivoNarrow">{tournament.nbPlayers}</p>
               <p className="font-archivoNarrow">
@@ -87,6 +79,6 @@ export const Tab: React.FC<TabProps> = ({
           </div>
         </section>
       </li>
-    </>
-  );
-};
+    );
+  },
+);

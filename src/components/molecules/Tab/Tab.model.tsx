@@ -4,5 +4,5 @@ export interface TabProps {
   isActive?: boolean;
   hasInfoBox?: boolean;
   tournament: Tournament;
-  onActiveTab: (active: boolean, item: Tournament) => void;
+  onActiveTab?: (active: boolean, item: Tournament) => void;
 }

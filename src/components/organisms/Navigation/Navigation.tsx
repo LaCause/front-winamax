@@ -4,6 +4,7 @@ import { Icon } from '../../atoms/Icon/Icon';
 
 export const Navigation = () => {
   const location = useLocation();
+  console.log(location);
   return (
     <>
       <nav className="fixed flex bottom-0 border-t-[1.5px] border-[#c2c7d6] justify-around w-full py-2 text-black z-10 bg-white font-archivoNarrow dark:bg-slate-800 transition">

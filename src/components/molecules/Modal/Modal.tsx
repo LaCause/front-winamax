@@ -17,6 +17,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
     return (
       <dialog
         ref={modalRef}
+        role="dialog"
         id="my_modal"
         className="modal"
         onCancel={() => console.log('test')}
