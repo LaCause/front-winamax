@@ -93,3 +93,6 @@ export const formatFiltersToQuery = (filters: FilterInput): string => {
 
   return encodeURI(formattedFilters);
 };
+
+export const loadJsonDataTournaments = async () =>
+  (await import('../../sample-poker.json')).default;
