@@ -1,10 +1,8 @@
-import { Tournament } from '../../../hook/useTournaments/useTournaments.model';
+import { Tournament } from '../../../hook/useWorker/useWorker.model';
 
 export interface TabProps {
   isActive?: boolean;
   hasInfoBox?: boolean;
-  selectedTournaments?: Tournament[];
-  addTournament: (tournament: Tournament) => void;
-  removeTournament: (tournament: Tournament) => void;
   tournament: Tournament;
+  onActiveTab?: (active: boolean, item: Tournament) => void;
 }

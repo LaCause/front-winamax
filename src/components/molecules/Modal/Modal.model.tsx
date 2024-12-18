@@ -3,7 +3,6 @@ export interface ModalHandle {
   closeModal: () => void;
 }
 export interface ModalProps {
-  isOpen: boolean;
   header?: React.ReactNode;
   content: React.ReactNode;
   footer?: React.ReactNode;

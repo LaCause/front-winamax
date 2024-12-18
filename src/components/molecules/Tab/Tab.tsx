@@ -1,62 +1,34 @@
 import iconTick from '/assets/icons/tick.svg';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { TabProps } from './Tab.model';
 import { formatCurrency, formatDate } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
 
-const addTick = (isActive: boolean) =>
-  isActive ? (
-    <>
-      <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
-        <img className="mr-1" src={iconTick} width={15} />
-        <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
-      </span>
-    </>
-  ) : null;
+export const Tab = React.memo(
+  ({ tournament, isActive, hasInfoBox, onActiveTab }: TabProps) => {
+    const handleClick = () => {
+      onActiveTab?.(!isActive, tournament);
+    };
 
-const addInfoBox = (hasInfoBox: TabProps['hasInfoBox']) =>
-  hasInfoBox ? (
-    <>
-      <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] -z-10 h-[45px] text-black -mt-[20px]">
-        <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
-      </section>
-    </>
-  ) : null;
-
-export const Tab: React.FC<TabProps> = ({
-  hasInfoBox,
-  tournament,
-  addTournament,
-  removeTournament,
-}) => {
-  const [active, setActive] = useState<boolean>();
-
-  const handleClick = () => setActive(!active);
-
-  const border = active ? 'shadow-shadowTab' : null;
-
-  useEffect(() => {
-    if (active) {
-      addTournament(tournament);
-    } else {
-      removeTournament(tournament);
-    }
-  }, [active]);
-
-  return (
-    <>
+    return (
       <li
-        key={tournament.tournamentId + 1}
+        key={tournament.tournamentId}
         className="relative"
         onClick={handleClick}
       >
-        {addInfoBox(hasInfoBox)}
+        {hasInfoBox && (
+          <section className="relative font-bold bg-primary-yellow w-full rounded-t-3xl top-[20px] h-[45px] text-black -mt-[20px]">
+            <p className="px-4 font-archivoNarrowBold">TOP TOURNOI</p>
+          </section>
+        )}
         <section
-          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 ${border} cursor-pointer`}
+          className={`relative flex flex-col text-black rounded-3xl bg-white py-2 px-4 gap-y-2 cursor-pointer ${
+            isActive ? 'shadow-shadowTab' : ''
+          }`}
         >
           <div className="flex items-center">
-            <span className="flex py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
+            <span className="flex justify-center py-2 px-3 rounded-3xl bg-primary-white relative -mr-[10px] right-[25px] shadow-md">
               <ImageComponent
                 width={15}
                 height={15}
@@ -66,9 +38,14 @@ export const Tab: React.FC<TabProps> = ({
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
             <PokerChips
               className="ml-2 overflow-visible"
-              isAnimating={active}
+              isAnimating={isActive}
             />
-            {active && addTick(active)}
+            {isActive && (
+              <span className="flex justify-evenly px-1 rounded-3xl bg-primary-green ml-auto">
+                <img className="mr-1" src={iconTick} width={15} alt="tick" />
+                <b className="mr-2 font-archivoNarrowBold text-xl">IN</b>
+              </span>
+            )}
           </div>
           <div className="flex">
             <div className="w-1/2 flex">
@@ -78,19 +55,18 @@ export const Tab: React.FC<TabProps> = ({
                 </time>
               </span>
               <span className="flex w-1/2">
-                {tournament?.icons.map((icon) => (
-                  <>
-                    <ImageComponent
-                      className="object-contain rounded-lg"
-                      width={20}
-                      height={20}
-                      src={`/assets/icons/${icon}.png`}
-                    />
-                  </>
+                {tournament.icons?.map((icon, index) => (
+                  <ImageComponent
+                    key={index}
+                    className="object-contain rounded-lg"
+                    width={20}
+                    height={20}
+                    src={`/assets/icons/${icon}.png`}
+                  />
                 ))}
               </span>
             </div>
-            <div className="w-1/2 flex justify-between front)">
+            <div className="w-1/2 flex justify-between">
               <p className="font-archivoNarrow">{tournament.limit}</p>
               <p className="font-archivoNarrow">{tournament.nbPlayers}</p>
               <p className="font-archivoNarrow">
@@ -103,6 +79,6 @@ export const Tab: React.FC<TabProps> = ({
           </div>
         </section>
       </li>
-    </>
-  );
-};
+    );
+  },
+);
