@@ -1,5 +1,3 @@
-import { BASENAME } from '../../../router';
-
 interface ImageOpts {
   folder: string;
 }
@@ -18,7 +16,5 @@ export const ImageComponent: React.FC<ImageProps> = ({
   src,
   className,
 }) => {
-  const url = `${BASENAME}/${src}`;
-
-  return <img className={className} src={url} width={width} height={height} />;
+  return <img className={className} src={src} width={width} height={height} />;
 };
