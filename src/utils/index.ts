@@ -96,3 +96,10 @@ export const formatFiltersToQuery = (filters: FilterInput): string => {
 
 export const loadJsonDataTournaments = async () =>
   (await import('../../sample-poker.json')).default;
+
+export const getBasenameUrl = () => {
+  if (import.meta.env.MODE === 'production') {
+    return '/front-winamax';
+  }
+  return '';
+};

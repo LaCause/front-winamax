@@ -1,7 +1,7 @@
 import iconTick from '/assets/icons/tick.svg';
 import React from 'react';
 import { TabProps } from './Tab.model';
-import { formatCurrency, formatDate } from '../../../utils';
+import { formatCurrency, formatDate, getBasenameUrl } from '../../../utils';
 import PokerChips from '../../atoms/PokerChips/PokerChips';
 import { ImageComponent } from '../../atoms/Image/Image';
 
@@ -32,7 +32,7 @@ export const Tab = React.memo(
               <ImageComponent
                 width={15}
                 height={15}
-                src={`/assets/flags/${tournament.flag}.png`}
+                src={`${getBasenameUrl()}/assets/flags/${tournament.flag}.png`}
               />
             </span>
             <b className="font-archivoNarrowBold text-xl">{tournament.name}</b>
@@ -61,7 +61,7 @@ export const Tab = React.memo(
                     className="object-contain rounded-lg"
                     width={20}
                     height={20}
-                    src={`/assets/icons/${icon}.png`}
+                    src={`${getBasenameUrl()}/assets/icons/${icon}.png`}
                   />
                 ))}
               </span>

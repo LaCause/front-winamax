@@ -6,21 +6,28 @@ import { ROUTES } from './routes';
 
 export const BASENAME = '/front-winamax';
 
-const router = createBrowserRouter([
+console.log('BASENAME', process.env.NODE_ENV);
+
+const router = createBrowserRouter(
+  [
+    {
+      path: ROUTES.HOME,
+      element: <App />,
+      children: [
+        {
+          path: ROUTES.HOME,
+          Component: Home,
+        },
+        {
+          path: ROUTES.READ_ME,
+          Component: ReadMe,
+        },
+      ],
+    },
+  ],
   {
-    path: ROUTES.HOME,
-    element: <App />,
-    children: [
-      {
-        path: ROUTES.HOME,
-        Component: Home,
-      },
-      {
-        path: ROUTES.READ_ME,
-        Component: ReadMe,
-      },
-    ],
+    basename: process.env.NODE_ENV === 'production' ? BASENAME : undefined,
   },
-]);
+);
 
 export default router;
