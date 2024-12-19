@@ -3,6 +3,7 @@ import App from '../App';
 import { Home } from '../templates/Home/Home';
 import { ReadMe } from '../templates/ReadMe/ReadMe';
 import { ROUTES } from './routes';
+import { Login } from '../templates/Login/Login';
 
 export const BASENAME = '/front-winamax';
 
@@ -21,6 +22,10 @@ const router = createBrowserRouter(
         {
           path: ROUTES.READ_ME,
           Component: ReadMe,
+        },
+        {
+          path: ROUTES.LOGIN,
+          Component: Login,
         },
       ],
     },

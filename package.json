@@ -17,6 +17,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@ant-design/icons": "4.0.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.0.1",
     "@types/lodash": "^4.17.13",
