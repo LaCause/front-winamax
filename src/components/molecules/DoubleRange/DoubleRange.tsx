@@ -1,12 +1,23 @@
-import React, { forwardRef, useCallback, useMemo, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from 'react';
 import { DoubleRangeHandle, DoubleRangeProps } from './DoubleRange.model';
 import { debounce } from 'lodash';
 
 export const DoubleRange = React.memo(
   forwardRef<DoubleRangeHandle, DoubleRangeProps>(
-    ({ min, max, onChange }, _ref) => {
-      const [currentMinBuyIn, setCurrentMinBuyIn] = useState<number>(min);
-      const [currentMaxBuyIn, setCurrentMaxBuyIn] = useState<number>(max);
+    (
+      { min, max, defaultMin = min, defaultMax = max, onChange = () => {} },
+      _ref,
+    ) => {
+      const [currentMinBuyIn, setCurrentMinBuyIn] =
+        useState<number>(defaultMin);
+      const [currentMaxBuyIn, setCurrentMaxBuyIn] =
+        useState<number>(defaultMax);
+
+      const debouncedOnChange = useRef(
+        debounce((values: { min: number; max: number }) => {
+          onChange?.(values);
+        }, 50),
+      ).current;
 
       const percentMin = useMemo(
         () => (currentMinBuyIn / 10000) * 100,
@@ -29,12 +40,11 @@ export const DoubleRange = React.memo(
         debouncedOnChange({ min: currentMinBuyIn, max: value });
       };
 
-      const debouncedOnChange = useCallback(
-        debounce((values: { min: number; max: number }) => {
-          onChange?.(values);
-        }, 50),
-        [onChange],
-      );
+      useEffect(() => {
+        // Mettre à jour localMin et localMax lorsque les props changent (reset)
+        setCurrentMinBuyIn(defaultMin);
+        setCurrentMaxBuyIn(defaultMax);
+      }, [defaultMin, defaultMax]);
 
       return (
         <>

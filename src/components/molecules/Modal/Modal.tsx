@@ -15,13 +15,7 @@ export const Modal = forwardRef<ModalHandle, ModalProps>(
     }));
 
     return (
-      <dialog
-        ref={modalRef}
-        role="dialog"
-        id="my_modal"
-        className="modal"
-        onBlur={() => modalRef.current?.close()}
-      >
+      <dialog ref={modalRef} role="dialog" id="my_modal" className="modal">
         <div className="modal-box px-4 py-1">
           {header && (
             <section

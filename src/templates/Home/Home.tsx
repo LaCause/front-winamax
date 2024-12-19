@@ -1,8 +1,8 @@
 import pokerBanner from '/images/tournois.jpg';
 import { Modal } from '../../components/molecules/Modal/Modal';
-import { useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import { ModalHandle } from '../../components/molecules/Modal/Modal.model';
-import { formatCurrency, formatFiltersToQuery } from '../../utils';
+import { formatFiltersToQuery } from '../../utils';
 import { DoubleRange } from '../../components/molecules/DoubleRange/DoubleRange';
 import { WithListStructure } from '../../hocs/withListStructure/withListStructure';
 import { ListStructure } from '../../components/molecules/ListStructure/ListStructure';
@@ -11,15 +11,16 @@ import { useFilters } from '../../hook/useFilters/useFilters';
 import { Controller, useForm } from 'react-hook-form';
 import { FilterInput } from '../../hook/useFilters/useFilters.model';
 import { HeaderTab } from '../../components/molecules/HeaderTab/HeaderTab';
-import { debounce } from 'lodash';
 import {
   WORKER_KEY,
+  WorkerMessageStates,
   WorkerMessageTypes,
 } from '../../hook/useWorker/useWokrer.const';
-import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
-
-//@TODO : add @typescript-eslint/parser @typescript-eslint/eslint-plugin
-// add to linter form typescript coverage
+import {
+  ListStructureInterface,
+  StructureTypes,
+} from '../../components/molecules/ListStructure/ListStructure.model';
+import { Badge } from '../../components/molecules/Badge/Badge';
 
 // @TODO: Add tinder with bet logic :
 // -> Swipe left / right : Team 1 vs Team 2
@@ -27,16 +28,17 @@ import { StructureTypes } from '../../components/molecules/ListStructure/ListStr
 // -> Swipe down / up : Team 2 vs Team 3
 
 export const Home = () => {
+  const { updateFilters, resetFilters, searchParams, getFilters } =
+    useFilters();
   const { data, processing, runWorkerMessage } = useWorker();
-  const { updateFilters, resetFilters, hasQueryFilters } = useFilters();
-  const { control, handleSubmit, setValue, getValues, register } =
+  const { control, handleSubmit, getValues, setValue, register } =
     useForm<FilterInput>();
 
-  const [rangeValues, setRangeValues] = useState({ min: 0, max: 10000 });
-  const min = useMemo(() => formatCurrency(rangeValues.min), [rangeValues.min]);
-  const max = useMemo(() => formatCurrency(rangeValues.max), [rangeValues.max]);
-
   const modalRef = useRef<ModalHandle>(null);
+  const rangeValuesRef = useRef({
+    min: getFilters('buyIn')?.value.min ?? 0,
+    max: getFilters('buyIn')?.value.max ?? 10000,
+  });
 
   const applyFilter = async () => {
     const formValues = getValues();
@@ -45,19 +47,49 @@ export const Home = () => {
     runWorkerMessage({
       key: WORKER_KEY,
       type: WorkerMessageTypes.FILTER_DATA,
+      state: WorkerMessageStates.WORKER_INPUT,
+      data: [],
       query,
-      listStructure: StructureTypes.LIST,
+      listStructure: StructureTypes.GRID,
     });
     modalRef.current?.closeModal();
   };
 
-  const handleRangeChange = debounce((values) => {
-    setValue('buyIn.min', values.min);
-    setValue('buyIn.max', values.max);
-    setRangeValues(values);
-  }, 300);
+  const handleRangeReset = useCallback(() => {
+    resetFilters();
+    runWorkerMessage({
+      key: WORKER_KEY,
+      type: WorkerMessageTypes.LOAD_DATA,
+      state: WorkerMessageStates.WORKER_INPUT,
+      data: [],
+      query: '',
+      listStructure: StructureTypes.GRID,
+    });
+  }, [resetFilters, runWorkerMessage]);
 
-  const DynamicListComponent = WithListStructure(ListStructure);
+  const handleRangeApply = useCallback(
+    (values: any) => {
+      rangeValuesRef.current = values;
+      setValue('buyIn.min', values.min);
+      setValue('buyIn.max', values.max);
+    },
+    [setValue],
+  );
+
+  const listStructureProps = useMemo<ListStructureInterface>(
+    () => ({
+      items: data?.data ?? [],
+      type: data?.listStructure ?? StructureTypes.GRID,
+    }),
+    [data?.data, data?.listStructure],
+  );
+
+  const DynamicListComponent = useMemo(
+    () => WithListStructure(ListStructure),
+    [],
+  );
+
+  console.log('HOME');
 
   return (
     <>
@@ -66,10 +98,10 @@ export const Home = () => {
         <button className="btn" onClick={modalRef.current?.openModal}>
           Ouvrir les filtres
         </button>
-        {hasQueryFilters && (
+        {searchParams.size > 0 && (
           <button
             className="btn btn-ghost border-gray-300 text-primary-red"
-            onClick={resetFilters}
+            onClick={handleRangeReset}
           >
             Reset
           </button>
@@ -80,12 +112,8 @@ export const Home = () => {
           content={
             <>
               <div className="flex justify-center gap-x-3">
-                <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  Prix min. :<b className="text-white ml-1">{min}</b>
-                </div>
-                <div className="badge badge-outline px-3 py-4 border-primary-red text-primary-grey">
-                  Prix max. :<b className="text-white ml-1">{max}</b>
-                </div>
+                <Badge title="Prix min" valueRef={rangeValuesRef} field="min" />
+                <Badge title="Prix min" valueRef={rangeValuesRef} field="max" />
               </div>
               <form
                 method="dialog"
@@ -100,7 +128,9 @@ export const Home = () => {
                       {...field}
                       min={0}
                       max={10000}
-                      onChange={handleRangeChange}
+                      defaultMin={getFilters('buyIn')?.value.min}
+                      defaultMax={getFilters('buyIn')?.value.max}
+                      onChange={handleRangeApply}
                     />
                   )}
                 />
@@ -122,7 +152,6 @@ export const Home = () => {
                   >
                     Valider
                   </button>
-                  {/* <p className="text-primary-red">{error}</p> */}
                 </div>
               </form>
             </>
@@ -134,10 +163,7 @@ export const Home = () => {
             {data && data.data && (
               <DynamicListComponent
                 loading={processing}
-                props={{
-                  items: data.data,
-                  type: data.listStructure,
-                }}
+                props={listStructureProps}
               />
             )}
           </ul>

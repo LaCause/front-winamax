@@ -6,3 +6,8 @@ export const WorkerMessageTypes = {
   CLEAR_DATA: 'CLEAR_DATA',
   REFRESH_DATA: 'REFRESH_DATA',
 } as const;
+
+export const WorkerMessageStates = {
+  WORKER_INPUT: 'WORKER_INPUT',
+  WORKER_OUTPUT: 'WORKER_OUTPUT',
+} as const;

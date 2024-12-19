@@ -1,28 +1,12 @@
 import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
-import { QueryFilter } from '../useFilters/useFilters.model';
-import { WorkerMessageTypes } from './useWokrer.const';
+import { WorkerMessageTypes, WorkerMessageStates } from './useWokrer.const';
 
 interface WorkerBaseMessage {
   key: string;
   listStructure: StructureTypes;
 }
-
-export interface LoadDataMessage extends WorkerBaseMessage {
-  type:
-    | typeof WorkerMessageTypes.LOAD_DATA
-    | typeof WorkerMessageTypes.REFRESH_DATA;
-  data: Tournament[];
-  query?: QueryFilter[];
-}
-
-interface FilterDataMessage extends WorkerBaseMessage {
-  type: typeof WorkerMessageTypes.FILTER_DATA;
-  query: string;
-  data?: Tournament[];
-}
-
-interface WorkerMessageOutputInterface {
-  listStructure?: StructureTypes;
+interface WorkerMessageOutputInterface extends WorkerBaseMessage {
+  state: typeof WorkerMessageStates.WORKER_OUTPUT;
   type:
     | typeof WorkerMessageTypes.LOAD_DATA
     | typeof WorkerMessageTypes.FILTER_DATA;
@@ -30,8 +14,18 @@ interface WorkerMessageOutputInterface {
   query: string;
 }
 
-export type WorkerMessageInput = LoadDataMessage | FilterDataMessage;
-export type WorkerMessageOutput = WorkerMessageOutputInterface;
+interface WorkerMessageInputInterface extends WorkerBaseMessage {
+  state: typeof WorkerMessageStates.WORKER_INPUT;
+  type:
+    | typeof WorkerMessageTypes.LOAD_DATA
+    | typeof WorkerMessageTypes.FILTER_DATA;
+  data: Tournament[];
+  query: string;
+}
+
+export type WorkerMessage =
+  | WorkerMessageInputInterface
+  | WorkerMessageOutputInterface;
 
 export interface Tournament {
   tournamentId: number;

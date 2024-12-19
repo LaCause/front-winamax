@@ -14,7 +14,9 @@ export const FilterTypeMapping = {
   triple: FilterTypes.BOOLEAN,
 } as const;
 
-interface QueryFilterBase {
+export type FilterCodeList = keyof typeof FiltersCode;
+
+export interface QueryFilterBase {
   code: keyof typeof FiltersCode;
 }
 
@@ -40,3 +42,8 @@ export type FilterInput = {
       ? boolean
       : never;
 };
+
+export interface FilterMapping {
+  buyIn: RangeFilter;
+  triple: BooleanFilter;
+}

@@ -3,16 +3,19 @@ import {
   MAX_TOURNAMENT_LIST,
   Tournament,
   Triple,
-  WorkerMessageInput,
-  WorkerMessageOutput,
+  WorkerMessage,
 } from './useWorker.model';
 import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
 import { FiltersCode, FilterTypes } from '../useFilters/useFilters.model';
-import { WORKER_KEY, WorkerMessageTypes } from './useWokrer.const';
+import {
+  WORKER_KEY,
+  WorkerMessageStates,
+  WorkerMessageTypes,
+} from './useWokrer.const';
 
 export interface ContextRPC {
-  onmessage: (event: MessageEvent<WorkerMessageInput>) => void;
-  postMessage: (message: WorkerMessageInput | WorkerMessageOutput) => void;
+  onmessage: (event: MessageEvent<WorkerMessage>) => void;
+  postMessage: (message: WorkerMessage) => void;
 }
 
 const ctx: ContextRPC = self as unknown as ContextRPC;
@@ -85,47 +88,53 @@ const initialData = [] as Tournament[];
 ctx.onmessage = async (event) => {
   if (
     typeof window !== 'undefined' &&
-    (event.data as WorkerMessageInput).key !== 'worker-winamax-sny'
+    event.data.key !== 'worker-winamax-sny'
   ) {
     self.close();
     return;
   }
 
-  switch (event.data.type) {
-    case WorkerMessageTypes.LOAD_DATA: {
-      initialData.push(...event.data.data);
+  if (
+    event.data.state === WorkerMessageStates.WORKER_INPUT &&
+    event.data.type === WorkerMessageTypes.LOAD_DATA
+  ) {
+    initialData.push(...event.data.data);
+  }
+
+  switch (event.data.state) {
+    case WorkerMessageStates.WORKER_INPUT: {
+      let result: Tournament[] | Tournament[][] = initialData;
+      let listStructure: StructureTypes = StructureTypes.GRID;
+
+      if (event.data.query) {
+        result = await applyFilterRules({
+          data: result,
+          queryFilter: event.data.query,
+        });
+        listStructure = StructureTypes.TRIPLE;
+      }
+
+      ctx.postMessage({
+        key: WORKER_KEY,
+        type: WorkerMessageTypes.LOAD_DATA,
+        state: WorkerMessageStates.WORKER_OUTPUT,
+        listStructure,
+        data: result,
+        query: event.data.query,
+      });
+      break;
+    }
+
+    case WorkerMessageStates.WORKER_OUTPUT: {
       ctx.postMessage({
         key: WORKER_KEY,
         listStructure: StructureTypes.GRID,
-        type: WorkerMessageTypes.LOAD_DATA,
         data: initialData,
+        type: WorkerMessageTypes.LOAD_DATA,
+        state: WorkerMessageStates.WORKER_OUTPUT,
+        query: event.data.query,
       });
       break;
     }
-
-    case WorkerMessageTypes.FILTER_DATA: {
-      const copyData = initialData;
-      const query = event.data.query;
-
-      const filteredTournaments = await applyFilterRules({
-        data: copyData,
-        queryFilter: query,
-      });
-
-      if (filteredTournaments) {
-        ctx.postMessage({
-          listStructure:
-            filteredTournaments && filteredTournaments.length > 0
-              ? StructureTypes.TRIPLE
-              : StructureTypes.LIST,
-          type: WorkerMessageTypes.FILTER_DATA,
-          data: filteredTournaments,
-          query: query,
-        });
-      }
-      break;
-    }
-    default:
-      break;
   }
 };

@@ -1,17 +1,23 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
-import { Tournament, WorkerMessageInput } from './useWorker.model';
-import { WORKER_KEY, WorkerMessageTypes } from './useWokrer.const';
+import { Tournament, WorkerMessage } from './useWorker.model';
+import {
+  WORKER_KEY,
+  WorkerMessageStates,
+  WorkerMessageTypes,
+} from './useWokrer.const';
 import { ContextRPC } from './worker-winamax';
 import { StructureTypes } from '../../components/molecules/ListStructure/ListStructure.model';
 import { loadJsonDataTournaments } from '../../utils';
+import { useLocation } from 'react-router-dom';
 
 export const useWorker = () => {
-  const [data, setData] = useState<WorkerMessageInput>();
+  const location = useLocation();
+  const [data, setData] = useState<WorkerMessage>();
   const [processing, setProcessing] = useState(true);
   const workerRef = useRef<ContextRPC>();
 
   const runWorkerMessage = useCallback(
-    (message: WorkerMessageInput) => {
+    (message: WorkerMessage) => {
       setProcessing(true);
       if (workerRef.current) {
         workerRef.current.postMessage(message);
@@ -26,9 +32,13 @@ export const useWorker = () => {
         const formated = {
           ...event.data,
           data: event.data.data?.slice(0, 10),
-        } as WorkerMessageInput;
-
-        setData(formated);
+        };
+        setData((prevData: any) => {
+          if (JSON.stringify(prevData) === JSON.stringify(formated)) {
+            return prevData;
+          }
+          return formated;
+        });
         setProcessing(false);
       };
     }
@@ -59,8 +69,9 @@ export const useWorker = () => {
 
           runWorkerMessage({
             key: WORKER_KEY,
-            query: [],
+            query: location.search,
             type: WorkerMessageTypes.LOAD_DATA,
+            state: WorkerMessageStates.WORKER_INPUT,
             data: formattedResponse,
             listStructure: StructureTypes.GRID,
           });
@@ -70,7 +81,7 @@ export const useWorker = () => {
       }
     };
     initializeWorker();
-  });
+  }, [data, listenWorkerMessage, location.search, runWorkerMessage]);
 
   return { data, runWorkerMessage, processing };
 };
