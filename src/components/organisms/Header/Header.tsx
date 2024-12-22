@@ -5,7 +5,7 @@ export const Header = () => {
   const { darkmode, toggleDarkMode } = useTheme();
   return (
     <>
-      <header className="z-20 fixed w-full bg-slate-100 flex justify-between border-b-[1.5px] border-[#c2c7d6] mb-2 dark:bg-slate-800 transition px-2">
+      <header className="z-20 sticky top-0 w-full bg-slate-100 flex justify-between border-b-[1.5px] border-[#c2c7d6] dark:bg-slate-800 transition px-2">
         <img src={logoWinamax} width={50} className="p-1" />
         <div
           id="test"
