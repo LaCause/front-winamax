@@ -13,9 +13,9 @@ function App() {
         className={`flex flex-col min-h-screen bg-primary-grey dark:bg-slate-800 ${darkmode ? 'dark' : 'light'}`}
       >
         <Header />
-        <div className="flex-grow flex items-center justify-center py-16 mb-[70px]">
+        <section>
           <Outlet />
-        </div>
+        </section>
         <Navigation />
       </div>
     </>

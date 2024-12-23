@@ -1,4 +1,5 @@
 import daisyui from 'daisyui';
+import plugin from 'tailwindcss/plugin';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -37,5 +38,17 @@ export default {
       },
     },
   },
-  plugins: [daisyui],
+  plugins: [
+    plugin(({ addUtilities, theme }) => {
+      const colors = theme('colors');
+      const gradientStops = Object.keys(colors).reduce((acc, key) => {
+        const color = colors[key];
+        acc[`.stop-${key}`] = { stopColor: color };
+        return acc;
+      }, {});
+
+      addUtilities(gradientStops, ['responsive', 'hover', 'focus']);
+    }),
+    daisyui,
+  ],
 };

@@ -89,8 +89,6 @@ export const Home = () => {
     [],
   );
 
-  console.log('HOME');
-
   return (
     <>
       <section className="flex flex-col gap-3 px-3">

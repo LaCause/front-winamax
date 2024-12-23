@@ -1,4 +1,9 @@
-export type IconName = 'home' | 'homeInactive' | 'readme' | 'readMeInactive';
+export type IconName =
+  | 'home'
+  | 'homeInactive'
+  | 'readme'
+  | 'readMeInactive'
+  | 'login';
 
 export interface IconProps {
   name: IconName;
