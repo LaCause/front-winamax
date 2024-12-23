@@ -7,8 +7,6 @@ import { Login } from '../templates/Login/Login';
 
 export const BASENAME = '/front-winamax';
 
-console.log('BASENAME', process.env.NODE_ENV);
-
 const router = createBrowserRouter(
   [
     {

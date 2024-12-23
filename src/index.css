@@ -125,3 +125,23 @@
 .gradient-primary {
   background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
+
+.stop-red {
+  stop-color: #ff0000; /* Rouge */
+}
+
+.stop-blue {
+  stop-color: #9adafd; /* Bleu */
+}
+
+.stop-blue-marine {
+  stop-color: #70b2eb; /* Bleu */
+}
+
+.dark .stop-blue {
+  stop-color: #6d90d7; /* Bleu */
+}
+
+.dark .stop-blue-marine {
+  stop-color: #1d2f6b; /* Bleu */
+}

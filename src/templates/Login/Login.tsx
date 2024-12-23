@@ -1,25 +1,30 @@
 import { LockFilled, UserOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
-import { AnimatedHead } from '../../components/organisms/AnimatedHead/AnimatedHead';
+import { InteractiveLogin } from '../../components/organisms/InteractiveLogin/InteractiveLogin';
 
 export const Login = () => {
   const [isFocused, setIsFocused] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null); // Référence typée
+  const inputRef = useRef<HTMLInputElement>(null);
+  const inputPasswordRef = useRef<HTMLInputElement>(null);
   const [cursorPosition, setCursorPosition] = useState(0);
+  const [cursorPasswordPosition, setCursorPasswordPosition] = useState(0);
 
-  console.log('----> Login');
-
-  const handleCaretPosition = () => {
+  const handleMailChange = () => {
     const input = inputRef.current;
     if (input) {
-      input.focus(); // S'assurer que l'input est focusé
+      input.focus();
       const position = input.selectionStart ?? 0;
       setCursorPosition(position);
     }
   };
 
-  const handleMailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log('Email:', e.target.value); // Affiche la valeur saisie
+  const handlePasswordChange = () => {
+    const input = inputPasswordRef.current;
+    if (input) {
+      input.focus();
+      const position = input.selectionStart ?? 0;
+      setCursorPasswordPosition(position);
+    }
   };
 
   return (
@@ -28,9 +33,10 @@ export const Login = () => {
         <div>
           <div className="card glass w-96 mt-24">
             <div className="flex flex-col mx-auto -mt-20">
-              <AnimatedHead
+              <InteractiveLogin
                 showHead={isFocused}
                 animateEyes={cursorPosition}
+                animateHands={cursorPasswordPosition}
                 className="relative"
               />
             </div>
@@ -41,23 +47,28 @@ export const Login = () => {
               <label className="input input-bordered bg-gray-300 flex items-center gap-2 text-primary-red ">
                 <UserOutlined />
                 <input
-                  ref={inputRef} // Ajout de la ref pour accéder à l'élément
+                  ref={inputRef}
                   type="text"
                   name="email"
                   className="grow placeholder:text-primary-red"
                   placeholder="Username"
                   autoComplete="on"
                   onFocus={() => setIsFocused(true)}
-                  onChange={handleCaretPosition} // Mise à jour sur frappe
+                  onBlur={() => setIsFocused(false)}
+                  onChange={handleMailChange}
                 />
               </label>
               <label className="input input-bordered bg-gray-300 text-primary-red flex items-center gap-2">
                 <LockFilled />
                 <input
+                  ref={inputPasswordRef}
                   type="password"
                   name="current-password"
                   className="grow"
                   autoComplete="on"
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                  onChange={handlePasswordChange}
                 />
               </label>
               <p className="text-gray-500 dark:text-white text-sm text-center">
